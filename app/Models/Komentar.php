@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class KomentarFoto extends Model
+class Komentar extends Model
 {
     //
 }
