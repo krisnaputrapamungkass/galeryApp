@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class BerandaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('beranda');
     }
 
     /**
@@ -28,21 +27,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validasi = $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required|min:8',
-            'nama_lengkap' => 'required',
-            'alamat' => 'required',
-        ]); 
-
-        $user = User::create($validasi);
-        if  ($user) {
-            return redirect()->route('beranda.index')->with('success', 'Register Berhasil');
-        }else{
-            return redirect()->route('beranda.index')->with('error', 'Register Gagal');
-        }
-        return redirect('users/login');
+        //
     }
 
     /**
