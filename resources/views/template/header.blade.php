@@ -75,8 +75,8 @@
                                     </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Daftar</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Daftar</button>
                             </div>
                             </form>
                         </div>
@@ -105,12 +105,12 @@
                                     </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary"
+                                <button type="button" class="btn btn-danger"
                                     data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">login</button>
                                 <!-- Button trigger modal -->
                                 </form>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                     data-bs-target="#registrasi">
                                     Registrasi
                                 </button>
@@ -123,14 +123,14 @@
                     <button class="btn btn-outline-success me-2" type="submit">Search</button>
                     @if (Auth::check() == true)
                         <input type="text" value="{{ Auth::user()->name }}" readonly class="form-control me-2">
-                        <a class="btn btn-danger" href="{{ route('users.logout') }}">Logout</a>
+                        <a class="btn btn-outline-danger" href="{{ route('users.logout') }}">Logout</a>
                     @else
                         <!-- Button trigger modal -->
-                        <button type="button" class="ml-2 btn btn-primary me-2" data-bs-toggle="modal"
+                        <button type="button" class="ml-2 btn btn-outline-primary me-2" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">
                             Login
                         </button>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
                             data-bs-target="#registrasi">
                             Registrasi
                         </button>

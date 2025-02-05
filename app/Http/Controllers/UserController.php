@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Authenticated;
+use Illuminate\Container\Attributes\Auth as AttributesAuth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use PharIo\Manifest\Author;
 
 class UserController extends Controller
 {
@@ -44,6 +48,29 @@ class UserController extends Controller
         }
         return redirect('users/login');
     }
+
+
+    public function login(Request $request)
+   {
+     $validasi = $request->validate([
+         'email' => 'required',
+         'password' => 'required|min:8',
+     ]);
+
+     $login_check = Auth::attempt($validasi);
+
+     if ($login_check) {
+         return redirect()->route('beranda.index')->with('success', 'Login Berhasil');
+     } else {
+         return redirect()->route('beranda.index')->with('error', 'Login Gagal');
+     }
+   }
+
+   public function logout()
+   {
+        Auth::logout();
+        return redirect()->route('beranda.index')->with('success', 'Logout Berhasil');
+   }
 
     /**
      * Display the specified resource.
