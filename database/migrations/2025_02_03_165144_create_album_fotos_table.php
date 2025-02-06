@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('album');
             $table->string('deskripsi');
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

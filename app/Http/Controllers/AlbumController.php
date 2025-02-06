@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Foto;
+use App\Models\AlbumFoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class FotoController extends Controller
+class AlbumController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,29 +29,17 @@ class FotoController extends Controller
      */
     public function store(Request $request)
     {
-        $valiatio = $request->validate([
-            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'judul' => 'required',
+        $valiation = $request->validate([
+            'album' => 'required',
             'deskripsi' => 'required',
-            'status' => 'required',
         ]);
+        $valiation['users_id'] = Auth::user()->id;
+        $album = AlbumFoto::create($valiation);
 
-        $foto = $request->file('foto');
-        $nama_foto = time() . "." . $foto->getClientOriginalName();
-        $foto_upload = $foto->move(public_path('/storage/images'), $nama_foto);
-
-        if ($foto_upload) {
-            $valiatio['foto'] = $nama_foto;
-            $valiatio['users_id'] = Auth::user()->id;
-            $fotoSimpan = Foto::create($valiatio);
-
-            if ($fotoSimpan) {
-                return redirect()->route('beranda.index')->with('success', 'Foto berhasil ditambahkan');
-            } else {
-                return redirect()->route('beranda.index')->with('error', 'Foto gagal ditambahkan');
-            }
+        if ($album) {
+            return redirect()->route('beranda.index')->with('success', 'Album berhasil ditambahkan');
         } else {
-            return redirect()->route('beranda.index')->with('error', 'Foto gagal ditambahkan');
+            return redirect()->route('beranda.index')->with('error', 'Album gagal ditambahkan');
         }
     }
 

@@ -14,6 +14,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('users/logout', [UserController::class, 'logout'])->name('users.logout');
    Route::resource('foto', FotoController::class);
+   Route::resource('album', AlbumController::class);
 });
 
 Route::resource('users', UserController::class);

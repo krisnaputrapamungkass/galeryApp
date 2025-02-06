@@ -13,5 +13,6 @@ class Foto extends Model
         'deskripsi',
         'status',
         'album_id',
+        'users_id',
     ];
 }

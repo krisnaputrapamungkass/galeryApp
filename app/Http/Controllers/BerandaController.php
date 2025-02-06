@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlbumFoto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BerandaController extends Controller
 {
@@ -11,7 +13,13 @@ class BerandaController extends Controller
      */
     public function index()
     {
-        return view('beranda');
+        if (Auth::check()) {
+            $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
+        }else{
+        $album = null;
+        }
+
+        return view('beranda', compact('album'));
     }
 
     /**
