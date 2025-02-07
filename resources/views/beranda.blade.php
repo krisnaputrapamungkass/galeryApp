@@ -7,89 +7,176 @@
         </div>
         @if (Auth::check() == true)
             <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahFoto">
-            Tambah Foto
-        </button>
-        <!-- Modal -->
-        <div class="modal fade" id="tambahFoto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('foto.store')}}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="formfile" class="form-label">Foto</label>
-                                <input class="form-control" type="file" id="formfile" name="foto">
-                            </div>
-                            <div class="mb-3">
-                                <label for="">Judul</label>
-                                <input type="text" class="form-control" name="judul">
-                            </div>
-                            <div class="mb-3">
-                                <label for="">Deskripsi</label>
-                                <textarea name="deskripsi" class="form-control" id="" cols="30" rows="10"></textarea> 
-                            </div>
-                            <select name="status" id="" class="form-control">
-                                <option value="1">Publish</option>
-                                <option value="0">Draft</option>
-                            </select>
-                            
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahAlbum">
-            Tambah Album
-        </button>
-        <!-- Modal -->
-        <div class="modal fade" id="tambahAlbum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('album.store')}}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="formfile" class="form-label">Album</label>
-                                <input class="form-control" type="text" id="formfile" name="album">
-                            </div>
-                            <div class="mb-3">
-                                <label for="">Deskripsi</label>
-                                <input type="text" class="form-control" name="deskripsi">
-                            </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
-        
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahFoto">
+                Tambah Foto
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="tambahFoto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('foto.store') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="formfile" class="form-label">Foto</label>
+                                    <input class="form-control" type="file" id="formfile" name="foto">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Judul</label>
+                                    <input type="text" class="form-control" name="judul">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Deskripsi</label>
+                                    <textarea name="deskripsi" class="form-control" id="" cols="30" rows="10"></textarea>
+                                </div>
+                                <label for="">Status</label>
+                                <select name="status" id="" class="form-control">
+                                    <option value="1">Publish</option>
+                                    <option value="0">Draft</option>
+                                </select>
+                                <label for="">Album</label>
+                                <select name="album_id" id="" class="form-control">
+                                    @foreach ($album as $item)
+                                        <option value="{{ $item->id }}">{{ $item->album }}</option>
+                                    @endforeach
+                                </select>
 
-        
-        <div class="mt-3 card" style="width: 18rem;">
-            <img src="https://images.vexels.com/media/users/3/131734/isolated/preview/05d86a9b63d1930d6298b27081ddc345-photo-preview-frame-icon.png" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahAlbum">
+                Tambah Album
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="tambahAlbum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('album.store') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="formfile" class="form-label">Album</label>
+                                    <input class="form-control" type="text" id="formfile" name="album">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Deskripsi</label>
+                                    <input type="text" class="form-control" name="deskripsi">
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col">
+                                <img src="..." class="img-fluit" alt="">
+                            </div>
+                            <div class="col">
+                                <label for="">Author</label>
+                                <label for="">Caption</label>
+                                <label for="">Deskripsi</label>
+                                <hr>
+                                <label for="">Komentar</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @if ($fotos->isEmpty())
+                <div class="alert alert-danger">Tidak Ada</div>
+            @endif
+            @foreach ($fotos as $item)
+                <div class="col">
+                    <div class="mt-3 card" style="width: 18rem;">
+                        <img src="{{ asset('storage/images/' . $item->foto) }}"
+                            style="text-align:center;width: 285px; height: 200px;" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $item->judul }}</h5>
+                            <p class="card-text">{{ $item->deskripsi }}</p>
+                            <p>{{ $item->nama_lengkap }}</p>
+
+                            <hr>
+                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" 
+                                data-bs-target="#exampleModal"
+                                data-judul= {{ $item->judul }}
+                                data-deskripsi= {{ $item->deskripsi }}
+                                data-foto= {{ $item->foto }}
+                                data-nama= {{ $item->nama_lengkap }}
+                                data-id= {{ $item->id }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5" />
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn btn-outline-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn btn-outline-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                            <path stroke-dasharray="72" stroke-dashoffset="72" d="M3 19.5v-15.5c0 -0.55 0.45 -1 1 -1h16c0.55 0 1 0.45 1 1v12c0 0.55 -0.45 1 -1 1h-14.5Z">
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="72;0" />
+                                            </path>
+                                            <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 7h8">
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" values="10;0" />
+                                            </path>
+                                            <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 10h8">
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="10;0" />
+                                            </path>
+                                            <path stroke-dasharray="6" stroke-dashoffset="6" d="M8 13h4">
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="1.3s" dur="0.2s" values="6;0" />
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
-@endsection  
+@endsection

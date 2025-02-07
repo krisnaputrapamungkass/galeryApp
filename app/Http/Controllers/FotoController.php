@@ -34,6 +34,7 @@ class FotoController extends Controller
             'judul' => 'required',
             'deskripsi' => 'required',
             'status' => 'required',
+            'album_id' => 'required',
         ]);
 
         $foto = $request->file('foto');

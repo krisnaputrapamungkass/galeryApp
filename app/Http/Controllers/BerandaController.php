@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlbumFoto;
+use App\Models\Foto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BerandaController extends Controller
 {
@@ -15,11 +17,14 @@ class BerandaController extends Controller
     {
         if (Auth::check()) {
             $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
-        }else{
+            $fotos = DB::table('fotos')->join('users', 'fotos.users_id', '=', 'users.id')->get();
+        }else
+        {
         $album = null;
+        $fotos = DB::table('fotos')->join('users', 'fotos.users_id', '=', 'users.id')->get();
         }
 
-        return view('beranda', compact('album'));
+        return view('beranda', compact('album','fotos'));
     }
 
     /**
