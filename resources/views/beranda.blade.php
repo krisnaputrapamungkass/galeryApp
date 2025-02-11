@@ -101,12 +101,15 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col">
-                                <img src="..." class="img-fluit" alt="">
+                                <img src="..." id="foto" class="img-fluid" alt="...">
                             </div>
                             <div class="col">
-                                <label for="">Author</label>
-                                <label for="">Caption</label>
-                                <label for="">Deskripsi</label>
+                                <label for="">Dibuat Oleh :</label>
+                                <label for="" class="form-label" id="name">Author</label>
+                                <hr>
+                                <label for="" class="form-label" id="judul">Caption</label>
+                                <hr>
+                                <label for="" class="form-label" id="deskripsi">Deskripsi</label>
                                 <hr>
                                 <label for="">Komentar</label>
                             </div>
@@ -132,41 +135,60 @@
                             <hr>
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" 
-                                data-bs-target="#exampleModal"
-                                data-judul= {{ $item->judul }}
-                                data-deskripsi= {{ $item->deskripsi }}
-                                data-foto= {{ $item->foto }}
-                                data-nama= {{ $item->nama_lengkap }}
-                                data-id= {{ $item->id }}
-                                >
+                                <button type="button" class="btn btn-outline-info show" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" data-judul={{ $item->judul }}
+                                    data-deskripsi={{ $item->deskripsi }} data-foto={{ $item->foto }}
+                                    data-nama={{ $item->nama_lengkap }} data-id={{ $item->id }}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24">
                                         <path fill="currentColor"
                                             d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5" />
                                     </svg>
                                 </button>
+                                @if (Auth::check() == true)
+                                    @if ($item->fotos_id == null && $item->likeUser == null)
+                                        {{-- Button like --}}
+                                        <button type="button" class="btn btn-outline-info like"
+                                            data-id={{ $item->id }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="currentColor"
+                                                    d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
+                                            </svg>
+                                        </button>
+                                    @else
+                                        {{-- Button like --}}
+                                        <button type="button" class="btn btn-outline-info unlike">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="currentColor"
+                                                    d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
+                                            </svg>
+                                        </button>
+                                    @endif
+                                @endif
+
                                 <button type="button" class="btn btn-outline-info">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24">
-                                        <path fill="currentColor"
-                                            d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
-                                    </svg>
-                                </button>
-                                <button type="button" class="btn btn-outline-info">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                                            <path stroke-dasharray="72" stroke-dashoffset="72" d="M3 19.5v-15.5c0 -0.55 0.45 -1 1 -1h16c0.55 0 1 0.45 1 1v12c0 0.55 -0.45 1 -1 1h-14.5Z">
-                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="72;0" />
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path stroke-dasharray="72" stroke-dashoffset="72"
+                                                d="M3 19.5v-15.5c0 -0.55 0.45 -1 1 -1h16c0.55 0 1 0.45 1 1v12c0 0.55 -0.45 1 -1 1h-14.5Z">
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s"
+                                                    values="72;0" />
                                             </path>
                                             <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 7h8">
-                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" values="10;0" />
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s"
+                                                    dur="0.2s" values="10;0" />
                                             </path>
                                             <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 10h8">
-                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="10;0" />
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="1s"
+                                                    dur="0.2s" values="10;0" />
                                             </path>
                                             <path stroke-dasharray="6" stroke-dashoffset="6" d="M8 13h4">
-                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="1.3s" dur="0.2s" values="6;0" />
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="1.3s"
+                                                    dur="0.2s" values="6;0" />
                                             </path>
                                         </g>
                                     </svg>
@@ -179,4 +201,42 @@
             @endforeach
         </div>
     </div>
+@endsection
+
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+                    $('.show').on('click', function() {
+                        var id = $(this).data('id');
+                        var judul = $(this).data('judul');
+                        var deskripsi = $(this).data('deskripsi');
+                        var author = $(this).data('nama');
+                        var foto = $(this).data('foto');
+                        $('#exampleModalLabel').text(judul);
+                        $('#foto').attr('src', "{{ asset('storage/images/') }}/" + foto);
+                        $('#name').text(author);
+                        $('#deskripsi').text(deskripsi);
+                        $('#judul').text(judul);
+                    });
+                    $('.like').on('click', function() {
+                            var id = $(this).data('id');
+                            $.ajax({
+                                    url: "{{ route('like.store') }}",
+                                    type: "POST",
+                                    data: {
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        method: "POST",
+                                        data: {
+                                            id: id
+                                        },
+                                        success: function(data) {
+                                            console.log(data);
+                                        }
+                                    });
+                            });
+                    });
+    </script>
 @endsection

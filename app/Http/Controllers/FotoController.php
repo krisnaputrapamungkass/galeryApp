@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Foto;
+use App\Models\LikeFoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,6 +54,30 @@ class FotoController extends Controller
             }
         } else {
             return redirect()->route('beranda.index')->with('error', 'Foto gagal ditambahkan');
+        }
+    }
+
+    public function like(Request $request)
+    {
+        $validasi = $request->validate([
+            'id' => 'required',
+        ]);
+
+        $simpan = LikeFoto::create([
+            'fotos_id' => $request->id,
+            'users_id' => Auth::user()->id,
+        ]);
+        
+        if ($simpan) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Like berhasil',
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Like gagal',
+            ]);
         }
     }
 

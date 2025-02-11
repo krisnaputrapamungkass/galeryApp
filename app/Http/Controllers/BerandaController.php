@@ -17,11 +17,17 @@ class BerandaController extends Controller
     {
         if (Auth::check()) {
             $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
-            $fotos = DB::table('fotos')->join('users', 'fotos.users_id', '=', 'users.id')->get();
+            $fotos = DB::table('fotos')
+            ->join('users', 'fotos.users_id', '=', 'users.id')
+            ->leftjoin('like_fotos', 'fotos_id', '=', 'like_fotos.fotos_id')
+            ->select('fotos.*', 'users.nama_lengkap', 'like_fotos.fotos_id', 'like_fotos.users_id as likeUser')
+            ->get();
         }else
         {
         $album = null;
-        $fotos = DB::table('fotos')->join('users', 'fotos.users_id', '=', 'users.id')->get();
+        $fotos = DB::table('fotos')
+        ->join('users', 'fotos.users_id', '=', 'users.id')
+        ->get();
         }
 
         return view('beranda', compact('album','fotos'));

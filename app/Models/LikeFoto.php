@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class LikeFoto extends Model
 {
-    //
+    protected $guarded = ['id'];
 }
