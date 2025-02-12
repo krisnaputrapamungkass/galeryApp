@@ -15,4 +15,14 @@ class Foto extends Model
         'album_id',
         'users_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id',);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(LikeFoto::class, 'fotos_id');
+    }
 }

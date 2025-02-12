@@ -1,0 +1,33 @@
+<script>
+        $(document).ready(function() {
+            $('.show').on('click', function() {
+                var id = $(this).data('id');
+                var judul = $(this).data('judul');
+                var deskripsi = $(this).data('deskripsi');
+                var author = $(this).data('nama');
+                var foto = $(this).data('foto');
+                $('#exampleModalLabel').text(judul);
+                $('#foto').attr('src', "{{ asset('storage/images/') }}/" + foto);
+                $('#name').text(author);
+                $('#deskripsi').text(deskripsi);
+                $('#judul').text(judul);
+            });
+            $('.like').on('click', function() {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: "{{ route('like') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: "POST",
+                    data: {
+                        id: id,
+                    },
+                    success: function() {
+                        location.reload();
+                    }
+                });
+            });
+
+        });
+    </script>

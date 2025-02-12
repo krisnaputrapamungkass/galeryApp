@@ -39,7 +39,7 @@ class FotoController extends Controller
         ]);
 
         $foto = $request->file('foto');
-        $nama_foto = time() . "." . $foto->getClientOriginalName();
+        $nama_foto = time() . "." . $foto->getClientOriginalExtension();
         $foto_upload = $foto->move(public_path('/storage/images'), $nama_foto);
 
         if ($foto_upload) {
