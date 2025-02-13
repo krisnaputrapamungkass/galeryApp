@@ -81,6 +81,29 @@ class FotoController extends Controller
         }
     }
 
+    public function unlike(Request $request)
+    {
+        $validasi = $request->validate([
+            'id' => 'required',
+        ]);
+
+        $findData = LikeFoto::where('fotos_id', $request->id)->where('users_id', Auth::user()->id)->first();
+
+        $simpan = $findData->delete();
+        
+        if ($simpan) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Unlike berhasil',
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Unlike gagal',
+            ]);
+        }
+    }
+
     /**
      * Display the specified resource.
      */

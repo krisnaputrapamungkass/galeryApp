@@ -14,6 +14,7 @@ Route::middleware(['auth'])->group(function () {
    Route::resource('foto', FotoController::class);
    Route::resource('album', AlbumController::class);
    Route::post('like', [FotoController::class, 'like'])->name('like');
+   Route::post('unlike', [FotoController::class, 'unlike'])->name('unlike');
 });
 
 Route::resource('users', UserController::class);
