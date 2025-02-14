@@ -11,12 +11,14 @@ Route::get('/', [BerandaController::class, 'index'])->name('beranda.index');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('users/logout', [UserController::class, 'logout'])->name('users.logout');
-   Route::resource('foto', FotoController::class);
-   Route::resource('album', AlbumController::class);
-   Route::post('like', [FotoController::class, 'like'])->name('like');
-   Route::post('unlike', [FotoController::class, 'unlike'])->name('unlike');
+    Route::resource('foto', FotoController::class);
+    Route::resource('album', AlbumController::class);
+    Route::post('like', [FotoController::class, 'like'])->name('like');
+    Route::post('unlike', [FotoController::class, 'unlike'])->name('unlike');
+    Route::post('komentar', [FotoController::class, 'komentar'])->name('komentar');
+    Route::post('komentar/{id}', [FotoController::class, 'Detailkomentar'])->name('Detailkomentar');
 });
 
 Route::resource('users', UserController::class);
-Route::POST('users/login',[UserController::class,'login'])->name('users.login');
+Route::POST('users/login', [UserController::class, 'login'])->name('users.login');
 Route::resource('beranda', BerandaController::class);

@@ -111,19 +111,31 @@
                                 <hr>
                                 <label for="" class="form-label" id="deskripsi">Deskripsi</label>
                                 <hr>
-                                <label for="">Komentar</label>
+                                @if (Auth::check() == true)
+                                    <label for="">Komentar</label>
+                                    <div class="input-group">
+                                        <input type="hidden" name="id" id="idFoto">
+                                        <textarea name="komentar" id="isiKomentar" class="form-control" id="" cols="30" rows="2"></textarea>
+                                        <button class="btn btn-primary" id="btnKomentar">Kirim</button>
+                                    </div>
+
+                                    <div id="komentarAll">
+
+                                    </div>
+                                @endif
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row d-flex justify-content-start">
             @if ($fotos->isEmpty())
                 <div class="alert alert-danger">Tidak Ada</div>
             @endif
             @foreach ($fotos as $item)
-                <div class="col">
+                <div class="col-auto">
                     <div class="mt-3 card" style="width: 18rem;">
                         <img src="{{ asset('storage/images/' . $item->foto) }}"
                             style="text-align:center;width: 285px; height: 200px;" class="card-img-top" alt="...">
@@ -136,12 +148,9 @@
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-outline-info show" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" 
-                                    data-judul={{ $item->judul }}
-                                    data-deskripsi={{ $item->deskripsi }} 
-                                    data-foto={{ $item->foto }}
-                                    data-nama={{ $item->user->nama_lengkap }} 
-                                    data-id={{ $item->id }}>
+                                    data-bs-target="#exampleModal" data-judul={{ $item->judul }}
+                                    data-deskripsi={{ $item->deskripsi }} data-foto={{ $item->foto }}
+                                    data-nama={{ $item->user->nama_lengkap }} data-id={{ $item->id }}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24">
                                         <path fill="currentColor"
@@ -153,17 +162,23 @@
                                         {{-- Button like --}}
                                         <button type="button" class="btn btn-outline-danger like"
                                             data-id="{{ $item->id }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="currentColor"
+                                                    d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z" />
                                             </svg>
+                                            <label for=""> {{ $item->likes->count() }}</label>
                                         </button>
                                     @else
                                         {{-- Button like --}}
                                         <button type="button" class="btn btn-outline-danger unlike"
-                                        data-id="{{ $item->id }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path fill="#c40707" d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
+                                            data-id="{{ $item->id }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="#c40707"
+                                                    d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
                                             </svg>
+                                            <label for=""> {{ $item->likes->count() }}</label>
                                         </button>
                                     @endif
                                 @endif
@@ -214,11 +229,26 @@
                 var author = $(this).data('nama');
                 var foto = $(this).data('foto');
                 console.log(foto);
+                $('#idFoto').val(id);
                 $('#exampleModalLabel').text(judul);
                 $('#foto').attr('src', "{{ asset('storage/images/') }}/" + foto);
                 $('#name').text(author);
                 $('#deskripsi').text(deskripsi);
                 $('#judul').text(judul);
+
+                $.ajax({
+                    url: "{{ route('Detailkomentar', ':id') }}".replase(':id, id'),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: "PUT",
+                    data: {
+                        id: id,
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    }
+                })
             });
             $('.like').on('click', function() {
                 var id = $(this).data('id');
@@ -227,16 +257,16 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    method : "POST",
+                    method: "POST",
                     data: {
                         id: id,
                     },
                     success: function() {
-                      location.reload();
+                        location.reload();
                     }
                 });
             });
-            
+
             $('.unlike').on('click', function() {
                 var id = $(this).data('id');
                 $.ajax({
@@ -252,7 +282,25 @@
                         location.reload();
                     }
                 });
-            })
+            });
+            $('#btnKomentar').on('click', function() {
+                var id = $('#idFoto').val();
+                var komentar = $('#isiKomentar').val();
+                $.ajax({
+                    url: "{{ route('komentar') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: "POST",
+                    data: {
+                        id: id,
+                        komentar: komentar,
+                    },
+                    success: function() {
+                        location.reload();
+                    }
+                });
+            });
         });
     </script>
 @endsection
