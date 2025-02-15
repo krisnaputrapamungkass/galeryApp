@@ -132,15 +132,18 @@ class FotoController extends Controller
     
     }
 
-    public function Detailkomentar(Request $request)
+    public function Detailkomentar(Request $request, $id)
     {
         $validasi = $request->validate([
             'id' => 'required',
         ]);
-
         $data = Foto::find($id);
-        $komentar = KomentarFoto::where('fotos_id', $data[1]->id)->get();
-        dd($komentar);
+        $komentar = KomentarFoto::with('user')->where('fotos_id', $data->id)->get();
+        // dd($komentar);
+        return response()->json([
+            'success' => true,
+            'data' => $komentar
+        ]);
     }
 
 

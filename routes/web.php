@@ -16,7 +16,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('like', [FotoController::class, 'like'])->name('like');
     Route::post('unlike', [FotoController::class, 'unlike'])->name('unlike');
     Route::post('komentar', [FotoController::class, 'komentar'])->name('komentar');
-    Route::post('komentar/{id}', [FotoController::class, 'Detailkomentar'])->name('Detailkomentar');
+    Route::put('komentar/{id}', [FotoController::class, 'Detailkomentar'])->name('Detailkomentar');
 });
 
 Route::resource('users', UserController::class);

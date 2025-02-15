@@ -118,7 +118,7 @@
                                         <textarea name="komentar" id="isiKomentar" class="form-control" id="" cols="30" rows="2"></textarea>
                                         <button class="btn btn-primary" id="btnKomentar">Kirim</button>
                                     </div>
-
+                                    <hr>
                                     <div id="komentarAll">
 
                                     </div>
@@ -141,8 +141,10 @@
                             style="text-align:center;width: 285px; height: 200px;" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">{{ $item->judul }}</h5>
-                            <p class="card-text">{{ $item->deskripsi }}</p>
-                            <p>{{ $item->user->nama_lengkap }}</p>
+                            <p class="short-text">{{ Str::limit($item->deskripsi, 50, '') }}</p>
+                            <p class="full-text d-none">{{ $item->deskripsi }}</p>
+
+                            <a href="javascript:void(0)" class="btn btn-link read-more">Read More</a>
 
                             <hr>
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
@@ -237,18 +239,39 @@
                 $('#judul').text(judul);
 
                 $.ajax({
-                    url: "{{ route('Detailkomentar', ':id') }}".replase(':id, id'),
+                    url: "{{ route('Detailkomentar', ':id') }}".replace(':id', id),
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    method: "PUT",
+                    type: "PUT",
                     data: {
                         id: id,
                     },
                     success: function(data) {
-                        console.log(data);
+                        var html = `
+                        <div style="max-width: 500px; height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-family: Arial, sans-serif;">
+                            <ul style="list-style-type: none; padding: 0; margin: 0;">`;
+
+                                            for (var i = 0; i < data.data.length; i++) {
+                                                html += `
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                                <!-- Gambar Profil (Placeholder) -->
+                                <!-- Isi Komentar -->
+                                <div style="max-width: 400px;">
+                                    <strong>${data.data[i].user.nama_lengkap}</strong>
+                                    <p>
+                                        ${data.data[i].komentar}
+                                    </p>
+                                </div>
+                            </li>`;
+                                            }
+                            html += `
+                            </ul>
+                        </div>`;
+                        // console.log( data.data.length);
+                        $('#komentarAll').html(html);
                     }
-                })
+                });
             });
             $('.like').on('click', function() {
                 var id = $(this).data('id');
@@ -300,6 +323,19 @@
                         location.reload();
                     }
                 });
+            });
+            $(".read-more").click(function() {
+                let cardText = $(this).prevAll(".short-text");
+                let moreText = $(this).prevAll(".full-text");
+                if (moreText.hasClass("d-none")) {
+                    moreText.removeClass("d-none");
+                    cardText.addClass("d-none");
+                    // $(this).text("Less");
+                } else {
+                    moreText.addClass("d-none");
+                    cardText.removeClass("d-none");
+                    $(this).text("Read More");
+                }
             });
         });
     </script>

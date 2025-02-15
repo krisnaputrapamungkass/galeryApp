@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -8,10 +8,11 @@
     <title>Galery Foto Kambing</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false"
@@ -19,11 +20,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <a class="navbar-brand" href="#">Galery Foto No</a>
+                <a class="navbar-brand fw-bold fs-4 text-primary" href="#">Galery Foto No</a>
+
                 <ul class="mb-2 navbar-nav me-auto mb-lg-0">
                     @if (Auth::check() == true)
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Beranda</a>
+                            <a class="nav-link active" aria-current="page" href="{{ route('beranda.index') }}">Beranda</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Profil</a>
@@ -40,6 +42,14 @@
                         </li>
                     @endif
                 </ul>
+
+                <!-- Theme Switcher -->
+                <div class="me-3">
+                    <button class="btn btn-link nav-link" id="themeSwitcher">
+                        <i class="bi bi-sun-fill theme-icon-active" data-theme-icon-active="bi-sun-fill"></i>
+                    </button>
+                </div>
+
                 <!-- Modal -->
                 <div class="modal fade" id="registrasi" data-bs-backdrop="static" data-bs-keyboard="false"
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -141,11 +151,9 @@
         </div>
     </nav>
 
-
     @if ($errors->any())
         <div class="container mt-1 ">
             <div class="alert alert-danger">
-
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -155,7 +163,6 @@
         </div>
     @endif
 
-
     @if (session('success'))
         <div class="container mt-1 ">
             <div class="alert alert-success" role="alert">
@@ -163,3 +170,48 @@
             </div>
         </div>
     @endif
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- Theme Switcher Script -->
+    <script>
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        const html = document.querySelector('html');
+        const themeIcon = themeSwitcher.querySelector('i');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            html.setAttribute('data-bs-theme', savedTheme);
+            updateIcon(savedTheme);
+        } else {
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            html.setAttribute('data-bs-theme', systemTheme);
+            updateIcon(systemTheme);
+        }
+
+        // Theme switcher click handler
+        themeSwitcher.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        // Update theme icon
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-fill');
+            } else {
+                themeIcon.classList.remove('bi-moon-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            }
+        }
+    </script>
+</body>
+</html>
