@@ -17,6 +17,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('unlike', [FotoController::class, 'unlike'])->name('unlike');
     Route::post('komentar', [FotoController::class, 'komentar'])->name('komentar');
     Route::put('komentar/{id}', [FotoController::class, 'Detailkomentar'])->name('Detailkomentar');
+    Route::post('getUpdate', [BerandaController::class, 'getUpdate'])->name('getUpdate');
 });
 
 Route::resource('users', UserController::class);

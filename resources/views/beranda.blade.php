@@ -101,7 +101,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col">
-                                <img src="..." id="foto" class="img-fluid" alt="...">
+                                <img src="..." id="foto" style="width: 300px; weight: 250px"   class="img-fluid" alt="...">
                             </div>
                             <div class="col">
                                 <label for="">Dibuat Oleh :</label>
@@ -141,7 +141,7 @@
                             style="text-align:center;width: 285px; height: 200px;" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">{{ $item->judul }}</h5>
-                            <p class="short-text">{{ Str::limit($item->deskripsi, 50, '') }}</p>
+                            <p class="short-text">{{ Str::limit($item->deskripsi, 25, '') }}</p>
                             <p class="full-text d-none">{{ $item->deskripsi }}</p>
 
                             <a href="javascript:void(0)" class="btn btn-link read-more">Read More</a>
@@ -150,9 +150,9 @@
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-outline-info show" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" data-judul={{ $item->judul }}
-                                    data-deskripsi={{ $item->deskripsi }} data-foto={{ $item->foto }}
-                                    data-nama={{ $item->user->nama_lengkap }} data-id={{ $item->id }}>
+                                    data-bs-target="#exampleModal" data-judul="{{ $item->judul }}"
+                                    data-deskripsi="{{ $item->deskripsi }}" data-foto="{{ $item->foto }}"
+                                    data-nama="{{ $item->user->nama_lengkap }} "data-id="{{ $item->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24">
                                         <path fill="currentColor"
@@ -169,7 +169,7 @@
                                                 <path fill="currentColor"
                                                     d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z" />
                                             </svg>
-                                            <label for=""> {{ $item->likes->count() }}</label>
+                                            <label for="" class="likeLabel" data-id="{{ $item->id }}"> {{ $item->likes->count() }}</label>
                                         </button>
                                     @else
                                         {{-- Button like --}}
@@ -180,7 +180,7 @@
                                                 <path fill="#c40707"
                                                     d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
                                             </svg>
-                                            <label for=""> {{ $item->likes->count() }}</label>
+                                            <label for="" class="likeLabel" data-id="{{ $item->id }}"> {{ $item->likes->count() }}</label>
                                         </button>
                                     @endif
                                 @endif
@@ -209,6 +209,7 @@
                                             </path>
                                         </g>
                                     </svg>
+                                    <label for="" class="komentarLabel" data-id="{{ $item->id }}"> {{ $item->komentar->count() }}</label>
                                 </button>
                             </div>
 
@@ -228,6 +229,7 @@
                 var id = $(this).data('id');
                 var judul = $(this).data('judul');
                 var deskripsi = $(this).data('deskripsi');
+                // alert(deskripsi);
                 var author = $(this).data('nama');
                 var foto = $(this).data('foto');
                 console.log(foto);
@@ -235,6 +237,7 @@
                 $('#exampleModalLabel').text(judul);
                 $('#foto').attr('src', "{{ asset('storage/images/') }}/" + foto);
                 $('#name').text(author);
+                let wrapText = deskripsi.match(/.{1,25}/g).join("<br>");
                 $('#deskripsi').text(deskripsi);
                 $('#judul').text(judul);
 
@@ -338,5 +341,48 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        function updateLikedanKomentar() {
+            $(".likeLabel").each(function() {
+                var id = $(this).data('id');
+                var label = $(this);
+                // alert(label);
+                $.ajax({
+                    url: "{{ route('getUpdate') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: "POST",
+                    data: {
+                        id: id,
+                    },
+                    success: function(response) {
+                       label.text(response.likes);
+                    }
+                });
+            });
+            $(".komentarLabel").each(function() {
+                var id = $(this).data('id');
+                var label = $(this);
+                $.ajax({
+                    url: "{{ route('getUpdate') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: "POST",
+                    data: {
+                        id: id,
+                    },
+                    success: function(response) {
+                       label.text(response.komentar);
+                    }
+                });
+            });
+        }
+        
+        setInterval(updateLikedanKomentar, 10000);
+
     </script>
 @endsection

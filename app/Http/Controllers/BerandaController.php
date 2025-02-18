@@ -7,6 +7,7 @@ use App\Models\Foto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class BerandaController extends Controller
 {
@@ -17,16 +18,25 @@ class BerandaController extends Controller
     {
         if (Auth::check()) {
             $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
-            $fotos = Foto::with('user', 'likes.user')->get();
+            $fotos = Foto::with('user', 'likes.user')->orderBy('created_at', 'desc')->get();
         }else
         {
         $album = null;
-        $fotos = Foto::with('user', 'likes.user')->get();
+        $fotos = Foto::with('user', 'likes.user')->orderBy('created_at', 'desc')->get();
         }
 
         return view('beranda', compact('album','fotos'));
     }
 
+    public function getUpdate(Request $request)
+{
+    $foto = Foto::find($request->id);
+
+    return response()->json([
+        'likes' => $foto->likes->count(),
+        'komentar' => $foto->komentar->count(),
+    ]);
+}
     /**
      * Show the form for creating a new resource.
      */
