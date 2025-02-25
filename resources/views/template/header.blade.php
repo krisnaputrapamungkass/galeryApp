@@ -28,7 +28,7 @@
                             <a class="nav-link active" aria-current="page" href="{{ route('beranda.index') }}">Beranda</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Profil</a>
+                            <a class="nav-link" href="{{ route('profile') }}">Profil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Album</a>
