@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('nama_lengkap');
             $table->text('alamat');
-            $table->string('foto');
+            $table->string('foto')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
