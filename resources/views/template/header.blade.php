@@ -20,7 +20,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <a class="navbar-brand fw-bold fs-4 text-primary" href="#">Galery Foto No</a>
+                {{-- <a class="navbar-brand fw-bold fs-4 text-primary" href="#">Galery Foto No</a> --}}
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                    <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center" href="#">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1375/1375106.png" alt="Logo" height="30" class="me-2">
+                        Galery Foto
+                    </a>
 
                 <ul class="mb-2 navbar-nav me-auto mb-lg-0">
                     @if (Auth::check() == true)
@@ -62,33 +67,74 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('users.store') }}" method="post">
+                                <form action="{{ route('users.store') }}" method="post" id="registrationForm">
                                     @csrf
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Username</label>
-                                        <input type="text" name="name" class="form-control">
+                                        <input type="text" name="name" class="form-control" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                                        <input type="email" name="email" class="form-control">
+                                        <input type="email" name="email" class="form-control" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control">
+                                        <input type="password" name="password" id="password" class="form-control" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="">Nama Lengkap</label>
-                                        <input type="text" class="form-control" name="nama_lengkap">
+                                        <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+                                        <input type="password" name="password_confirmation" id="confirmPassword" class="form-control" required>
+                                        <div class="invalid-feedback" id="passwordError">
+                                            Password tidak cocok.
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="">Alamat</label>
-                                        <textarea name="alamat" class="form-control" id="" cols="30" rows="10"></textarea>
+                                        <label for="namaLengkap">Nama Lengkap</label>
+                                        <input type="text" class="form-control" id="namaLengkap" name="nama_lengkap" required>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="alamat">Alamat</label>
+                                        <textarea name="alamat" class="form-control" id="alamat" cols="30" rows="5" required></textarea>
+                                    </div>
+                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success">Daftar</button>
+                                <button type="button" class="btn btn-success" id="submitBtn">Daftar</button>
                             </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const form = document.getElementById('registrationForm');
+                                    const password = document.getElementById('password');
+                                    const confirmPassword = document.getElementById('confirmPassword');
+                                    const passwordError = document.getElementById('passwordError');
+                                    const submitBtn = document.getElementById('submitBtn');
+                            
+                                    // Validasi password saat tombol submit ditekan
+                                    submitBtn.addEventListener('click', function() {
+                                        if (password.value !== confirmPassword.value) {
+                                            confirmPassword.classList.add('is-invalid');
+                                            passwordError.style.display = 'block';
+                                            return false;
+                                        } else {
+                                            confirmPassword.classList.remove('is-invalid');
+                                            passwordError.style.display = 'none';
+                                            form.submit();
+                                        }
+                                    });
+                            
+                                    // Validasi password saat mengetik
+                                    confirmPassword.addEventListener('input', function() {
+                                        if (password.value !== confirmPassword.value) {
+                                            confirmPassword.classList.add('is-invalid');
+                                            passwordError.style.display = 'block';
+                                        } else {
+                                            confirmPassword.classList.remove('is-invalid');
+                                            passwordError.style.display = 'none';
+                                        }
+                                    });
+                                });
+                            </script>
                             </form>
                         </div>
                     </div>
@@ -99,7 +145,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Login Galery</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -121,10 +167,6 @@
                                 <button type="submit" class="btn btn-primary">login</button>
                                 <!-- Button trigger modal -->
                                 </form>
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                    data-bs-target="#registrasi">
-                                    Registrasi
-                                </button>
                             </div>
                         </div>
                     </div>

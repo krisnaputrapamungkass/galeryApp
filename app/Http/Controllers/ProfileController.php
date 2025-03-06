@@ -24,7 +24,7 @@ class ProfileController extends Controller
         
 
 
-        $foto->move(public_path('img-profile'), $fotoName);
+        $foto->move(public_path('/storage/img-profile'), $fotoName);
         return redirect()->route('profile')->with('success', 'Foto berhasil diupload');
 
         $user = User::find($id);

@@ -11,16 +11,22 @@
                         <h1 class="text-center">Profil</h1>
                         <button class="btn btn-sm btn-outline-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width=24 height=24 viewBox="0 0 50 50">
-                                <path fill="#FDFD" d="M10 12h30v4H10zm0 10h30v4H10zm0 10h30v4H10z"></path>
+                                <path fill="#FF2D20" d="M10 12h30v4H10zm0 10h30v4H10zm0 10h30v4H10z"></path>
                             </svg>
                         </button>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-4">
+                                @if (Auth::user()->foto)
+                                    <img src="{{ asset('storage/img-profile/' . Auth::user()->foto)')}}" alt="class"
+                                        class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                                @else
                                 <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=random"
                                     alt="profile" class="rounded-circle"
                                     style="width: 100px; height: 100px; object-fit: cover;">
+                                @endif
+                                
                                 <form action="{{ route('updateFoto', Auth::user()->id) }}" method="post" enctype="multipart/form-data" class="mt-4">
                                     @csrf
                                     @method('PUT')
