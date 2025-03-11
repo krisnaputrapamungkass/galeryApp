@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     //Profil
     Route::get('profile', [ProfileController::class, 'index'])->name('profile');
     Route::Put('updateFoto/{id}', [ProfileController::class, 'updateFoto'])->name('updateFoto');
+    Route::Put('updateProfile/{id}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 });
 
 

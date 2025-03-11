@@ -9,6 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="{{ asset('logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('logo.png') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -79,6 +82,11 @@
                                             <input type="text" name="name" class="form-control" required>
                                         </div>
                                         <div class="mb-3">
+                                            <label for="namaLengkap">Nama Lengkap</label>
+                                            <input type="text" class="form-control" id="namaLengkap"
+                                                name="nama_lengkap" required>
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Email address</label>
                                             <input type="email" name="email" class="form-control" required>
                                         </div>
@@ -88,17 +96,13 @@
                                                 required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+                                            <label for="confirmPassword" class="form-label">Konfirmasi
+                                                Password</label>
                                             <input type="password" name="password_confirmation" id="confirmPassword"
                                                 class="form-control" required>
                                             <div class="invalid-feedback" id="passwordError">
                                                 Password tidak cocok.
                                             </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="namaLengkap">Nama Lengkap</label>
-                                            <input type="text" class="form-control" id="namaLengkap"
-                                                name="nama_lengkap" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="alamat">Alamat</label>
@@ -184,8 +188,8 @@
                         <input class="form-control me-3 " type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success me-2" type="submit">Search</button>
                         @if (Auth::check() == true)
-                            <input type="text" value="{{ Auth::user()->name }}" readonly
-                                class="form-control me-2">
+                            {{-- <input type="text" value="{{ Auth::user()->name }}" readonly
+                                class="form-control me-2"> --}}
                             <a class="btn btn-outline-danger" href="{{ route('users.logout') }}">Logout</a>
                         @else
                             <!-- Button trigger modal -->
@@ -203,7 +207,7 @@
             </div>
     </nav>
 
-    @if ($errors->any())
+    {{-- @if ($errors->any())
         <div class="container mt-1 ">
             <div class="alert alert-danger">
                 <ul>
@@ -221,7 +225,7 @@
                 {{ session('success') }}
             </div>
         </div>
-    @endif
+    @endif --}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

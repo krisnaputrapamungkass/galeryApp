@@ -31,4 +31,15 @@ class ProfileController extends Controller
         $user->save();
         return redirect()->route('profile')->with('success', 'Foto berhasil diupload');
     }
+
+    public function updateProfile(Request $request, $id)
+    {
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->nama_lengkap = $request->nama_lengkap;
+        $user->email = $request->email;
+        $user->alamat = $request->alamat;
+        $user->save();
+        return redirect()->route('profile')->with('success' , 'Profile berhasil diupdate');
+    }
 }

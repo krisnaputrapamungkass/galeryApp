@@ -8,41 +8,102 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h1 class="m-0">Profil</h1>
                         <div class="d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50">
-                                <path fill="#FF2D20" d="M10 12h30v4H10zm0 10h30v4H10zm0 10h30v4H10z"></path>
-                            </svg>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editProfile">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50">
+                                    <path fill="#FF2D20" d="M10 12h30v4H10zm0 10h30v4H10zm0 10h30v4H10z"></path>
+                                </svg>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="editProfile" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('updateProfile', Auth::user()->id) }}" method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Name</label>
+                                                    <input class="form-control" type="text" name="name" id="name"
+                                                        value="{{ Auth::user()->name }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                                                    <input class="form-control" type="text" name="nama_lengkap"
+                                                        id="nama_lengkap" value="{{ Auth::user()->nama_lengkap }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input class="form-control" type="email" name="email" id="email"
+                                                        value="{{ Auth::user()->email }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="alamat" class="form-label">Alamat</label>
+                                                    <input class="form-control" type="text" name="alamat" id="alamat"
+                                                        value="{{ Auth::user()->alamat }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="text-center col-4">
-                                @if (Auth::user()->foto)
-                                    <img src="{{ asset('storage/img-profile/' . Auth::user()->foto)}}" alt="class"
-                                        class="rounded-circle" style="width: 165px; height: 165px; object-fit: cover;">
-                                @else
-                                <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=random"
-                                    alt="profile" class="rounded-circle"
-                                    style="width: 100px; height: 100px; object-fit: cover;">
-                                @endif
-                                
-                                <form action="{{ route('updateFoto', Auth::user()->id) }}" method="post" enctype="multipart/form-data" class="mt-3">
+                                <div class="position-relative d-inline-block">
+                                    <!-- Foto Profil -->
+                                    <img src="{{ Auth::user()->foto ? asset('storage/img-profile/' . Auth::user()->foto) : asset('default-profile.png') }}"
+                                        alt="Foto Profil" class="border rounded-circle border-secondary"
+                                        style="width: 165px; height: 165px; object-fit: cover; background-color: #2a2a2a; display: block;">
+
+                                    <!-- Tombol Upload dengan Ikon Kamera -->
+                                    <label for="uploadFoto"
+                                        class="bottom-0 p-2 shadow position-absolute end-0 bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 35px; height: 35px; cursor: pointer;">
+                                        <i class="text-white fas fa-camera"></i>
+                                    </label>
+                                </div>
+
+                                <!-- Form Upload Foto (Hidden) -->
+                                <form action="{{ route('updateFoto', Auth::user()->id) }}" method="post"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
-                                    <div class="mb-3 input-group input-group-sm">
-
-                                        <input type="file" class="form-control"
-                                            name="foto"aria-label="Sizing example input"
-                                            aria-describedby="inputGroup-sizing-sm">
-                                        <button type="submit" class="btn btn-primary">Upload</button>
-                                    </div>
-
+                                    <input type="file" id="uploadFoto" name="foto" class="d-none"
+                                        onchange="this.form.submit()">
                                 </form>
                             </div>
+
                             <div class="col-8">
                                 <h3>{{ Auth::user()->name }}</h3>
-                                <p>{{ Auth::user()->email }}</p>
-                                <p>{{ Auth::user()->nama_lengkap}}</p>
-                                <p>{{ Auth::user()->alamat}}</p>
+                                <div class="mt-3">
+                                    <p class="mb-1">
+                                        <i class="fas fa-envelope me-2"></i> {{ Auth::user()->email }}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-user me-2"></i> {{ Auth::user()->nama_lengkap }}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fa-solid fa-map-pin me-2"></i> {{ Auth::user()->alamat }}
+                                    </p>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -58,16 +119,18 @@
                         Tambah Foto
                     </button>
                     <!-- Modal -->
-                    <div class="modal fade" id="tambahFoto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal fade" id="tambahFoto" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('foto.store') }}" method="post" enctype="multipart/form-data">
+                                    <form action="{{ route('foto.store') }}" method="post"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="mb-3">
                                             <label for="formfile" class="form-label">Foto</label>
@@ -92,10 +155,11 @@
                                                 <option value="{{ $item->id }}">{{ $item->album }}</option>
                                             @endforeach
                                         </select>
-        
+
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                     </form>
                                 </div>
@@ -107,16 +171,18 @@
                         Tambah Album
                     </button>
                     <!-- Modal -->
-                    <div class="modal fade" id="tambahAlbum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal fade" id="tambahAlbum" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('album.store') }}" method="post" enctype="multipart/form-data">
+                                    <form action="{{ route('album.store') }}" method="post"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="mb-3">
                                             <label for="formfile" class="form-label">Album</label>
@@ -128,7 +194,8 @@
                                         </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                     </form>
                                 </div>
@@ -143,12 +210,14 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col">
-                                        <img src="..." id="foto" style="width: 300px; weight: 250px"   class="img-fluid" alt="...">
+                                        <img src="..." id="foto" style="width: 300px; weight: 250px"
+                                            class="img-fluid" alt="...">
                                     </div>
                                     <div class="col">
                                         <label for="">Dibuat Oleh :</label>
@@ -167,10 +236,10 @@
                                             </div>
                                             <hr>
                                             <div id="komentarAll">
-        
+
                                             </div>
                                         @endif
-        
+
                                     </div>
                                 </div>
                             </div>
@@ -185,14 +254,15 @@
                         <div class="col-auto">
                             <div class="mt-3 card" style="width: 18rem;">
                                 <img src="{{ asset('storage/images/' . $item->foto) }}"
-                                    style="text-align:center;width: 285px; height: 200px;" class="card-img-top" alt="...">
+                                    style="text-align:center;width: 285px; height: 200px;" class="card-img-top"
+                                    alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $item->judul }}</h5>
                                     <p class="short-text">{{ Str::limit($item->deskripsi, 25, '') }}</p>
                                     <p class="full-text d-none">{{ $item->deskripsi }}</p>
-        
+
                                     <a href="javascript:void(0)" class="btn btn-link read-more">Read More</a>
-        
+
                                     <hr>
                                     <div class="btn-group" role="group" aria-label="Basic outlined example">
                                         <!-- Button trigger modal -->
@@ -216,8 +286,10 @@
                                                         <path fill="currentColor"
                                                             d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z" />
                                                     </svg>
-                                                    
-                                                    <label for="" class="likeLabel" data-id="{{ $item->id }}"> {{ $item->likes->count() }}</label>
+
+                                                    <label for="" class="likeLabel"
+                                                        data-id="{{ $item->id }}">
+                                                        {{ $item->likes->count() }}</label>
                                                 </button>
                                             @else
                                                 {{-- Button like --}}
@@ -228,11 +300,13 @@
                                                         <path fill="#c40707"
                                                             d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
                                                     </svg>
-                                                    <label for="" class="likeLabel" data-id="{{ $item->id }}"> {{ $item->likes->count() }}</label>
+                                                    <label for="" class="likeLabel"
+                                                        data-id="{{ $item->id }}">
+                                                        {{ $item->likes->count() }}</label>
                                                 </button>
                                             @endif
                                         @endif
-        
+
                                         <button type="button" class="btn btn-outline-info">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24">
@@ -240,27 +314,28 @@
                                                     stroke-linejoin="round" stroke-width="2">
                                                     <path stroke-dasharray="72" stroke-dashoffset="72"
                                                         d="M3 19.5v-15.5c0 -0.55 0.45 -1 1 -1h16c0.55 0 1 0.45 1 1v12c0 0.55 -0.45 1 -1 1h-14.5Z">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s"
-                                                            values="72;0" />
+                                                        <animate fill="freeze" attributeName="stroke-dashoffset"
+                                                            dur="0.6s" values="72;0" />
                                                     </path>
                                                     <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 7h8">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s"
-                                                            dur="0.2s" values="10;0" />
+                                                        <animate fill="freeze" attributeName="stroke-dashoffset"
+                                                            begin="0.7s" dur="0.2s" values="10;0" />
                                                     </path>
                                                     <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 10h8">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="1s"
-                                                            dur="0.2s" values="10;0" />
+                                                        <animate fill="freeze" attributeName="stroke-dashoffset"
+                                                            begin="1s" dur="0.2s" values="10;0" />
                                                     </path>
                                                     <path stroke-dasharray="6" stroke-dashoffset="6" d="M8 13h4">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="1.3s"
-                                                            dur="0.2s" values="6;0" />
+                                                        <animate fill="freeze" attributeName="stroke-dashoffset"
+                                                            begin="1.3s" dur="0.2s" values="6;0" />
                                                     </path>
                                                 </g>
                                             </svg>
-                                            <label for="" class="komentarLabel" data-id="{{ $item->id }}"> {{ $item->komentar->count() }}</label>
+                                            <label for="" class="komentarLabel" data-id="{{ $item->id }}">
+                                                {{ $item->komentar->count() }}</label>
                                         </button>
                                     </div>
-        
+
                                 </div>
                             </div>
                         </div>
@@ -304,8 +379,8 @@
                         <div style="max-width: 500px; height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-family: Arial, sans-serif;">
                             <ul style="list-style-type: none; padding: 0; margin: 0;">`;
 
-                                            for (var i = 0; i < data.data.length; i++) {
-                                                html += `
+                        for (var i = 0; i < data.data.length; i++) {
+                            html += `
                             <li style="display: flex; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
                                 <!-- Gambar Profil (Placeholder) -->
                                 <!-- Isi Komentar -->
@@ -316,8 +391,8 @@
                                     </p>
                                 </div>
                             </li>`;
-                                            }
-                            html += `
+                        }
+                        html += `
                             </ul>
                         </div>`;
                         // console.log( data.data.length);
@@ -408,7 +483,7 @@
                         id: id,
                     },
                     success: function(response) {
-                       label.text(response.likes);
+                        label.text(response.likes);
                     }
                 });
             });
@@ -425,13 +500,13 @@
                         id: id,
                     },
                     success: function(response) {
-                       label.text(response.komentar);
+                        label.text(response.komentar);
                     }
                 });
             });
         }
-        
-        setInterval(updateLikedanKomentar, 10000);
 
+        setInterval(updateLikedanKomentar, 10000);
+    </script>
     </script>
 @endsection
