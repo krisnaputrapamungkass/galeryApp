@@ -9,7 +9,7 @@
                 title: "Berhasil!",
                 text: "{{ session('success') }}",
                 icon: "success",
-                timer: 1000, // 3 detik
+                timer: 1000, // 1 detik
                 showConfirmButton: false
             });
         });
@@ -22,7 +22,7 @@
                 title: "Gagal!",
                 text: "{{ session('error') }}",
                 icon: "error",
-                timer: 1000, // 3 detik
+                timer: 1000, // 1 detik
                 showConfirmButton: false
             });
         });
