@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Galery Foto Kambing</title>
+    <title>Galery Foto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
                     <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center" href="#">
                         <img src="https://cdn-icons-png.flaticon.com/512/1375/1375106.png" alt="Logo" height="30"
                             class="me-2">
-                        Galery Foto
+                        Galery Foto 
                     </a>
 
                     <ul class="mb-2 navbar-nav me-auto mb-lg-0">
@@ -113,7 +113,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-success" id="submitBtn">Daftar</button>
+                                    <button type="button" class="btn btn-primary" id="submitBtn">Daftar</button>
                                 </div>
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function() {

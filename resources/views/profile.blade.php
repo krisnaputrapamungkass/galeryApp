@@ -21,7 +21,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data</h1>
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data Profile</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -52,8 +52,7 @@
                                                 <div class="mb-3">
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                                     <button type="submit" class="btn btn-primary">Save</button>
                                                 </div>
                                             </form>
@@ -124,7 +123,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Foto</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
@@ -155,10 +154,9 @@
                                                 <option value="{{ $item->id }}">{{ $item->album }}</option>
                                             @endforeach
                                         </select>
-
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
+                                    <button type="button" class="btn btn-danger"
                                         data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                     </form>
@@ -167,7 +165,8 @@
                         </div>
                     </div>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahAlbum">
+                    <button type="button" class="btn btn-primary" 
+                    data-bs-toggle="modal" data-bs-target="#tambahAlbum">
                         Tambah Album
                     </button>
                     <!-- Modal -->
@@ -176,7 +175,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Album</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
@@ -194,7 +193,7 @@
                                         </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
+                                    <button type="button" class="btn btn-danger"
                                         data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                     </form>
@@ -227,19 +226,7 @@
                                         <hr>
                                         <label for="" class="form-label" id="deskripsi">Deskripsi</label>
                                         <hr>
-                                        @if (Auth::check() == true)
-                                            <label for="">Komentar</label>
-                                            <div class="input-group">
-                                                <input type="hidden" name="id" id="idFoto">
-                                                <textarea name="komentar" id="isiKomentar" class="form-control" id="" cols="30" rows="2"></textarea>
-                                                <button class="btn btn-primary" id="btnKomentar">Kirim</button>
-                                            </div>
-                                            <hr>
-                                            <div id="komentarAll">
-
-                                            </div>
-                                        @endif
-
+                        
                                     </div>
                                 </div>
                             </div>
@@ -334,6 +321,35 @@
                                             <label for="" class="komentarLabel" data-id="{{ $item->id }}">
                                                 {{ $item->komentar->count() }}</label>
                                         </button>
+                                        <div class="modal fade" id="komentarModal" tabindex="-1"
+                                        aria-labelledby="komentarModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="komentarModalLabel">Komentar</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <ul id="komentarList" class="list-group">
+                                                        @if (Auth::check() == true)
+                                                            <label for="">Komentar</label>
+                                                            <div class="input-group">
+                                                                <input type="hidden" name="id" id="idFoto">
+                                                                <textarea name="komentar" id="isiKomentar" class="form-control" id="" cols="30" rows="2"></textarea>
+                                                                <button class="btn btn-primary"
+                                                                    id="btnKomentar">Kirim</button>
+                                                            </div>
+                                                            <hr>
+                                                            <div id="komentarAll">
+    
+                                                            </div>
+                                                        @endif
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </div>
 
                                 </div>
@@ -347,24 +363,161 @@
 @endsection
 
 @section('script')
-    <script>
-        $(document).ready(function() {
-            $('.show').on('click', function() {
-                var id = $(this).data('id');
-                var judul = $(this).data('judul');
-                var deskripsi = $(this).data('deskripsi');
-                // alert(deskripsi);
-                var author = $(this).data('nama');
-                var foto = $(this).data('foto');
-                console.log(foto);
-                $('#idFoto').val(id);
-                $('#exampleModalLabel').text(judul);
-                $('#foto').attr('src', "{{ asset('storage/images/') }}/" + foto);
-                $('#name').text(author);
-                let wrapText = deskripsi.match(/.{1,25}/g).join("<br>");
-                $('#deskripsi').text(deskripsi);
-                $('#judul').text(judul);
+<script>
+    $(document).ready(function() {
+    // Kode yang sudah ada tetap dipertahankan
+    $('.show').on('click', function() {
+        var id = $(this).data('id');
+        var judul = $(this).data('judul');
+        var deskripsi = $(this).data('deskripsi');
+        // alert(deskripsi);
+        var author = $(this).data('nama');
+        var foto = $(this).data('foto');
+        console.log(foto);
+        $('#idFoto').val(id);
+        $('#exampleModalLabel').text(judul);
+        $('#foto').attr('src', "{{ asset('storage/images/') }}/" + foto);
+        $('#name').text(author);
+        let wrapText = deskripsi.match(/.{1,25}/g).join("<br>");
+        $('#deskripsi').text(deskripsi);
+        $('#judul').text(judul);
 
+        $.ajax({
+            url: "{{ route('Detailkomentar', ':id') }}".replace(':id', id),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "PUT",
+            data: {
+                id: id,
+            },
+            success: function(data) {
+                var html = `
+                <div style="max-width: 500px; height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-family: Arial, sans-serif;">
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">`;
+
+                for (var i = 0; i < data.data.length; i++) {
+                    html += `
+                    <li style="display: flex; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                        <!-- Gambar Profil (Placeholder) -->
+                        <!-- Isi Komentar -->
+                        <div style="max-width: 400px;">
+                            <strong>${data.data[i].user.nama_lengkap}</strong>
+                            <p>
+                                ${data.data[i].komentar}
+                            </p>
+                        </div>
+                    </li>`;
+                }
+                html += `
+                    </ul>
+                </div>`;
+                // console.log( data.data.length);
+                $('#komentarAll').html(html);
+            }
+        });
+    });
+
+    // Tambahkan event listener untuk tombol komentar
+    $('.btn-outline-info').on('click', function() {
+        if($(this).find('.komentarLabel').length > 0) {
+            var id = $(this).find('.komentarLabel').data('id');
+            $('#idFoto').val(id);
+            $('#komentarModal').modal('show');
+            
+            // Muat komentar
+            $.ajax({
+                url: "{{ route('Detailkomentar', ':id') }}".replace(':id', id),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "PUT",
+                data: {
+                    id: id,
+                },
+                success: function(data) {
+                    var html = `
+                    <div style="max-width: 500px; height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-family: Arial, sans-serif;">
+                        <ul style="list-style-type: none; padding: 0; margin: 0;">`;
+
+                    for (var i = 0; i < data.data.length; i++) {
+                        html += `
+                        <li style="display: flex; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                            <div style="max-width: 400px;">
+                                <strong>${data.data[i].user.nama_lengkap}</strong>
+                                <p>
+                                    ${data.data[i].komentar}
+                                </p>
+                            </div>
+                        </li>`;
+                    }
+                    html += `
+                        </ul>
+                    </div>`;
+                    $('#komentarAll').html(html);
+                }
+            });
+        }
+    });
+
+    $('.like').on('click', function() {
+        var id = $(this).data('id');
+        $.ajax({
+            url: "{{ route('like') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method: "POST",
+            data: {
+                id: id,
+            },
+            success: function() {
+                location.reload();
+            }
+        });
+    });
+
+    $('.unlike').on('click', function() {
+        var id = $(this).data('id');
+        $.ajax({
+            url: "{{ route('unlike') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method: "POST",
+            data: {
+                id: id,
+            },
+            success: function() {
+                location.reload();
+            }
+        });
+    });
+
+    $('#btnKomentar').on('click', function() {
+        var id = $('#idFoto').val();
+        var komentar = $('#isiKomentar').val();
+        
+        if(komentar.trim() === '') {
+            alert('Komentar tidak boleh kosong');
+            return;
+        }
+        
+        $.ajax({
+            url: "{{ route('komentar') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method: "POST",
+            data: {
+                id: id,
+                komentar: komentar,
+            },
+            success: function(response) {
+                // Bersihkan input komentar
+                $('#isiKomentar').val('');
+                
+                // Perbarui tampilan komentar
                 $.ajax({
                     url: "{{ route('Detailkomentar', ':id') }}".replace(':id', id),
                     headers: {
@@ -382,8 +535,6 @@
                         for (var i = 0; i < data.data.length; i++) {
                             html += `
                             <li style="display: flex; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                                <!-- Gambar Profil (Placeholder) -->
-                                <!-- Isi Komentar -->
                                 <div style="max-width: 400px;">
                                     <strong>${data.data[i].user.nama_lengkap}</strong>
                                     <p>
@@ -395,118 +546,71 @@
                         html += `
                             </ul>
                         </div>`;
-                        // console.log( data.data.length);
                         $('#komentarAll').html(html);
+                        
+                        // Perbarui jumlah komentar tanpa reload
+                        updateLikedanKomentar();
                     }
                 });
-            });
-            $('.like').on('click', function() {
-                var id = $(this).data('id');
-                $.ajax({
-                    url: "{{ route('like') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: "POST",
-                    data: {
-                        id: id,
-                    },
-                    success: function() {
-                        location.reload();
-                    }
-                });
-            });
-
-            $('.unlike').on('click', function() {
-                var id = $(this).data('id');
-                $.ajax({
-                    url: "{{ route('unlike') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: "POST",
-                    data: {
-                        id: id,
-                    },
-                    success: function() {
-                        location.reload();
-                    }
-                });
-            });
-            $('#btnKomentar').on('click', function() {
-                var id = $('#idFoto').val();
-                var komentar = $('#isiKomentar').val();
-                $.ajax({
-                    url: "{{ route('komentar') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: "POST",
-                    data: {
-                        id: id,
-                        komentar: komentar,
-                    },
-                    success: function() {
-                        location.reload();
-                    }
-                });
-            });
-            $(".read-more").click(function() {
-                let cardText = $(this).prevAll(".short-text");
-                let moreText = $(this).prevAll(".full-text");
-                if (moreText.hasClass("d-none")) {
-                    moreText.removeClass("d-none");
-                    cardText.addClass("d-none");
-                    // $(this).text("Less");
-                } else {
-                    moreText.addClass("d-none");
-                    cardText.removeClass("d-none");
-                    $(this).text("Read More");
-                }
-            });
+            },
+            error: function() {
+                alert('Terjadi kesalahan saat mengirim komentar');
+            }
         });
-    </script>
+    });
 
-    <script>
-        function updateLikedanKomentar() {
-            $(".likeLabel").each(function() {
-                var id = $(this).data('id');
-                var label = $(this);
-                // alert(label);
-                $.ajax({
-                    url: "{{ route('getUpdate') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: "POST",
-                    data: {
-                        id: id,
-                    },
-                    success: function(response) {
-                        label.text(response.likes);
-                    }
-                });
-            });
-            $(".komentarLabel").each(function() {
-                var id = $(this).data('id');
-                var label = $(this);
-                $.ajax({
-                    url: "{{ route('getUpdate') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: "POST",
-                    data: {
-                        id: id,
-                    },
-                    success: function(response) {
-                        label.text(response.komentar);
-                    }
-                });
-            });
+    $(".read-more").click(function() {
+        let cardText = $(this).prevAll(".short-text");
+        let moreText = $(this).prevAll(".full-text");
+        if (moreText.hasClass("d-none")) {
+            moreText.removeClass("d-none");
+            cardText.addClass("d-none");
+            $(this).text("Less");
+        } else {
+            moreText.addClass("d-none");
+            cardText.removeClass("d-none");
+            $(this).text("Read More");
         }
+    });
+});
 
-        setInterval(updateLikedanKomentar, 10000);
-    </script>
-    </script>
+function updateLikedanKomentar() {
+    $(".likeLabel").each(function() {
+        var id = $(this).data('id');
+        var label = $(this);
+        $.ajax({
+            url: "{{ route('getUpdate') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method: "POST",
+            data: {
+                id: id,
+            },
+            success: function(response) {
+                label.text(response.likes);
+            }
+        });
+    });
+    $(".komentarLabel").each(function() {
+        var id = $(this).data('id');
+        var label = $(this);
+        $.ajax({
+            url: "{{ route('getUpdate') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method: "POST",
+            data: {
+                id: id,
+            },
+            success: function(response) {
+                label.text(response.komentar);
+            }
+        });
+    });
+}
+
+setInterval(updateLikedanKomentar, 10000);
+</script>
 @endsection

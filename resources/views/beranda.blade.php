@@ -16,7 +16,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Foto</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -48,7 +48,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
                         </div>
@@ -65,7 +65,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Album</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -81,7 +81,7 @@
                                 </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
                         </div>
@@ -101,29 +101,17 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col">
-                                <img src="..." id="foto" style="width: 300px; weight: 250px"   class="img-fluid" alt="...">
+                                <img src="..." id="foto" style="width: 300px; weight: 250px" class="img-fluid"
+                                    alt="...">
                             </div>
                             <div class="col">
-                                <label for="">Dibuat Oleh :</label>
-                                <label for="" class="form-label" id="name">Author</label>
-                                <hr>
-                                <label for="" class="form-label" id="judul">Caption</label>
-                                <hr>
-                                <label for="" class="form-label" id="deskripsi">Deskripsi</label>
-                                <hr>
-                                @if (Auth::check() == true)
-                                    <label for="">Komentar</label>
-                                    <div class="input-group">
-                                        <input type="hidden" name="id" id="idFoto">
-                                        <textarea name="komentar" id="isiKomentar" class="form-control" id="" cols="30" rows="2"></textarea>
-                                        <button class="btn btn-primary" id="btnKomentar">Kirim</button>
-                                    </div>
+                                {{-- <label for="">Dibuat Oleh :</> --}}
+                                    <label for="">Dibuat Oleh :</label> <span id="name">Nama Author</span>
                                     <hr>
-                                    <div id="komentarAll">
-
-                                    </div>
-                                @endif
-
+                                    <label for="">Judul :</label> <span id="judul">Isi Caption</span>
+                                    <hr>
+                                    <label for="">Deskripsi :</label> <span id="deskripsi">Isi Deskripsi</span>
+                                    <hr>
                             </div>
                         </div>
                     </div>
@@ -169,7 +157,8 @@
                                                 <path fill="currentColor"
                                                     d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z" />
                                             </svg>
-                                            <label for="" class="likeLabel" data-id="{{ $item->id }}"> {{ $item->likes->count() }}</label>
+                                            <label for="" class="likeLabel" data-id="{{ $item->id }}">
+                                                {{ $item->likes->count() }}</label>
                                         </button>
                                     @else
                                         {{-- Button like --}}
@@ -180,12 +169,15 @@
                                                 <path fill="#c40707"
                                                     d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" />
                                             </svg>
-                                            <label for="" class="likeLabel" data-id="{{ $item->id }}"> {{ $item->likes->count() }}</label>
+                                            <label for="" class="likeLabel" data-id="{{ $item->id }}">
+                                                {{ $item->likes->count() }}</label>
                                         </button>
                                     @endif
                                 @endif
 
-                                <button type="button" class="btn btn-outline-info">
+                                <!-- Tombol komentar yang sudah diperbaiki -->
+                                <button type="button" class="btn btn-outline-info btn-komentar" data-bs-toggle="modal"
+                                    data-bs-target="#komentarModal" data-id="{{ $item->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24">
                                         <g fill="none" stroke="currentColor" stroke-linecap="round"
@@ -209,8 +201,40 @@
                                             </path>
                                         </g>
                                     </svg>
-                                    <label for="" class="komentarLabel" data-id="{{ $item->id }}"> {{ $item->komentar->count() }}</label>
+                                    <label for="" class="komentarLabel" data-id="{{ $item->id }}">
+                                        {{ $item->komentar->count() }}</label>
                                 </button>
+                                <!-- Modal untuk menampilkan komentar -->
+                                <div class="modal fade" id="komentarModal" tabindex="-1"
+                                    aria-labelledby="komentarModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="komentarModalLabel">Komentar</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul id="komentarList" class="list-group">
+                                                    @if (Auth::check() == true)
+                                                        <label for="">Komentar</label>
+                                                        <div class="input-group">
+                                                            <input type="hidden" name="id" id="idFoto">
+                                                            <textarea name="komentar" id="isiKomentar" class="form-control" id="" cols="30" rows="2"></textarea>
+                                                            <button class="btn btn-primary"
+                                                                id="btnKomentar">Kirim</button>
+                                                        </div>
+                                                        <hr>
+                                                        <div id="komentarAll">
+
+                                                        </div>
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
@@ -225,6 +249,47 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            // Handler untuk tombol komentar - Kode yang diperbaiki
+            $('.btn-komentar').on('click', function() {
+                var id = $(this).data('id');
+                $('#idFoto').val(id);
+                
+                // Mengambil komentar dengan AJAX
+                $.ajax({
+                    url: "{{ route('Detailkomentar', ':id') }}".replace(':id', id),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "PUT",
+                    data: {
+                        id: id,
+                    },
+                    success: function(data) {
+                        var html = `
+                        <div style="max-width: 500px; height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-family: Arial, sans-serif;">
+                            <ul style="list-style-type: none; padding: 0; margin: 0;">`;
+
+                        for (var i = 0; i < data.data.length; i++) {
+                            html += `
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                                <!-- Gambar Profil (Placeholder) -->
+                                <!-- Isi Komentar -->
+                                <div style="max-width: 400px;">
+                                    <strong>${data.data[i].user.nama_lengkap}</strong>
+                                    <p>
+                                        ${data.data[i].komentar}
+                                    </p>
+                                </div>
+                            </li>`;
+                        }
+                        html += `
+                            </ul>
+                        </div>`;
+                        $('#komentarAll').html(html);
+                    }
+                });
+            });
+
             $('.show').on('click', function() {
                 var id = $(this).data('id');
                 var judul = $(this).data('judul');
@@ -255,8 +320,8 @@
                         <div style="max-width: 500px; height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-family: Arial, sans-serif;">
                             <ul style="list-style-type: none; padding: 0; margin: 0;">`;
 
-                                            for (var i = 0; i < data.data.length; i++) {
-                                                html += `
+                        for (var i = 0; i < data.data.length; i++) {
+                            html += `
                             <li style="display: flex; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
                                 <!-- Gambar Profil (Placeholder) -->
                                 <!-- Isi Komentar -->
@@ -267,8 +332,8 @@
                                     </p>
                                 </div>
                             </li>`;
-                                            }
-                            html += `
+                        }
+                        html += `
                             </ul>
                         </div>`;
                         // console.log( data.data.length);
@@ -359,7 +424,7 @@
                         id: id,
                     },
                     success: function(response) {
-                       label.text(response.likes);
+                        label.text(response.likes);
                     }
                 });
             });
@@ -376,13 +441,11 @@
                         id: id,
                     },
                     success: function(response) {
-                       label.text(response.komentar);
+                        label.text(response.komentar);
                     }
                 });
             });
         }
-        
         setInterval(updateLikedanKomentar, 10000);
-
     </script>
 @endsection
