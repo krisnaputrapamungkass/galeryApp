@@ -36,6 +36,20 @@ class AlbumController extends Controller
         $valiation['users_id'] = Auth::user()->id;
         $album = AlbumFoto::create($valiation);
 
+        $previousUrl = url()->previous();
+
+        if ($album) {
+            if (str_contains($previousUrl, route('profile'))) {
+                return redirect()->route('profile')->with('success', 'Foto berhasil ditambahkan');
+            }
+            return redirect()->route('beranda.index')->with('success', 'Foto berhasil ditambahkan');
+        } else {
+            if (str_contains($previousUrl, route('profile'))) {
+                return redirect()->route('profile')->with('error', 'Gagal Upload');
+            }
+            return redirect()->route('beranda.index')->with('error', 'Gagal Upload');
+        }
+
         if ($album) {
             return redirect()->route('beranda.index')->with('success', 'Album berhasil ditambahkan');
         } else {

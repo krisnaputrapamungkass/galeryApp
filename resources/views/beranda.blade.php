@@ -38,6 +38,7 @@
                                 <select name="status" id="" class="form-control">
                                     <option value="1">Publish</option>
                                     <option value="0">Draft</option>
+                                    
                                 </select>
                                 <label for="">Album</label>
                                 <select name="album_id" id="" class="form-control">

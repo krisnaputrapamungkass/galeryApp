@@ -49,12 +49,25 @@ class FotoController extends Controller
             $fotoSimpan = Foto::create($valiatio);
 
             if ($fotoSimpan) {
+                // Cek apakah user datang dari halaman profile
+                $previousUrl = url()->previous();
+            
+                if (str_contains($previousUrl, route('profile'))) {
+                    return redirect()->route('profile')->with('success', 'Foto berhasil ditambahkan');
+                }
+            
                 return redirect()->route('beranda.index')->with('success', 'Foto berhasil ditambahkan');
             } else {
-                return redirect()->route('beranda.index')->with('error', 'Foto gagal ditambahkan');
+                return redirect()->back()->with('error', 'Foto gagal ditambahkan');
             }
         } else {
-            return redirect()->route('beranda.index')->with('error', 'Foto gagal ditambahkan');
+            $previousUrl = url()->previous();
+            
+            if (str_contains($previousUrl, route('profile'))) {
+                return redirect()->route('profile')->with('success', 'Gagal Upload');
+            }
+        
+            return redirect()->route('beranda.index')->with('success', 'gagal Upload');
         }
     }
 
