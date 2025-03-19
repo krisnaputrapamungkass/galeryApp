@@ -319,6 +319,17 @@
                                             <label for="" class="komentarLabel" data-id="{{ $item->id }}">
                                                 {{ $item->komentar->count() }}</label>
                                         </button>
+                                        <button type="button" class="btn btn-outline-info status" data-id="{{ $item->id }}" data-status="{{ $item->status }}">
+                                            @if ($item->status == 0)
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path fill="#000" d="m20.475 23.3l-2.95-2.95q-1.2.8-2.587 1.225T12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12q0-1.55.425-2.937T3.65 6.475L.675 3.5L2.1 2.075l19.8 19.8zM11 19.95V18q-.825 0-1.412-.587T9 16v-1l-4.8-4.8q-.075.45-.137.9T4 12q0 3.025 1.988 5.3T11 19.95m9.35-2.475l-1.45-1.45q.525-.925.813-1.937T20 12q0-2.45-1.362-4.475T15 4.6V5q0 .825-.587 1.413T13 7h-2v1.125L6.525 3.65q1.2-.775 2.575-1.212T12 2q2.075 0 3.9.788t3.175 2.137T21.213 8.1T22 12q0 1.525-.437 2.9t-1.213 2.575" />
+                                            </svg>
+                                            @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path fill="#000" d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m-1-2.05V18q-.825 0-1.412-.587T9 16v-1l-4.8-4.8q-.075.45-.137.9T4 12q0 3.025 1.988 5.3T11 19.95m6.9-2.55q1.025-1.125 1.563-2.512T20 12q0-2.45-1.362-4.475T15 4.6V5q0 .825-.587 1.413T13 7h-2v2q0 .425-.288.713T10 10H8v2h6q.425 0 .713.288T15 13v3h1q.65 0 1.175.388T17.9 17.4" />
+                                            </svg>
+                                            @endif
+                                        </button>
                                         <div class="modal fade" id="komentarModal" tabindex="-1"
                                             aria-labelledby="komentarModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -362,6 +373,24 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            $('.status').on('click', function() {
+                var id = $(this).data('id');
+                var status = $(this).data('status');
+                $.ajax({
+                    url: "{{ route('StatusUpdate', ':id') }}".replace(':id', id),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "PUT",
+                    data: {
+                        id: id,
+                        status: status,
+                    },
+                    success: function(data) {
+                        location.reload();
+                    }
+                });
+            });
             // Kode yang sudah ada tetap dipertahankan
             $('.show').on('click', function() {
                 var id = $(this).data('id');

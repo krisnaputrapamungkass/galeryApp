@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlbumFoto;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,17 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        //
+        $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
+        return view('album', compact('album'));
+    }
+
+    public function download()
+    {
+        $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
+
+        $pdf = Pdf::loadView('albumdownload', compact('album')); // Panggil facade dengan benar
+        
+        return $pdf->download('album-fotos-' . date('Y-m-d') . '-'.Auth::user()->name.' .pdf');
     }
 
     /**

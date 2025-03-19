@@ -42,4 +42,13 @@ class ProfileController extends Controller
         $user->save();
         return redirect()->route('profile')->with('success' , 'Profile berhasil diupdate');
     }
+
+    public function status(Request $request, $id)
+    {
+        $foto = Foto::find($id);
+        
+        $request->status == '1' ? $foto->status = '0' : $foto->status = '1';
+        $foto->save();
+        return response()->json(['success' => true]);
+    }
 }

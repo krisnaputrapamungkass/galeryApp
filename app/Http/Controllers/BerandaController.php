@@ -18,15 +18,16 @@ class BerandaController extends Controller
     {
         if (Auth::check()) {
             $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
-            $fotos = Foto::with('user', 'likes.user')->orderBy('created_at', 'desc')->get();
+            $fotos = Foto::with('user', 'likes.user')->where('status',"1")->orderBy('created_at', 'desc')->get();
         }else
         {
         $album = null;
-        $fotos = Foto::with('user', 'likes.user')->orderBy('created_at', 'desc')->get();
+        $fotos = Foto::with('user', 'likes.user')->where('status',"1")->orderBy('created_at', 'desc')->get();
         }
 
         return view('beranda', compact('album','fotos'));
     }
+    
 
     public function getUpdate(Request $request)
 {
@@ -37,6 +38,7 @@ class BerandaController extends Controller
         'komentar' => $foto->komentar->count(),
     ]);
 }
+
     /**
      * Show the form for creating a new resource.
      */

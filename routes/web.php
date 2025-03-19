@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\FotoController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -26,9 +27,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('profile', [ProfileController::class, 'index'])->name('profile');
     Route::Put('updateFoto/{id}', [ProfileController::class, 'updateFoto'])->name('updateFoto');
     Route::Put('updateProfile/{id}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
+    Route::Put('profile/status/{id}', [ProfileController::class, 'status'])->name('StatusUpdate');
+
+    //album
+    Route::get('album', [AlbumController::class, 'index'])->name('album');
+    Route::get('download', [AlbumController::class, 'download'])->name('album.download');
+
+    // Like
+    Route::get('like', [LikeController::class, 'index'])->name('like');
 });
 
-
+Route::post('/search', 'App\Http\Controllers\SearchController@search')->name('search');
 Route::resource('users', UserController::class);
 Route::POST('users/login', [UserController::class, 'login'])->name('users.login');
 Route::resource('beranda', BerandaController::class);

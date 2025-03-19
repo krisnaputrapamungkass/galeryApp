@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Galery Foto</title>
+    <title>Galery Foto Krisna</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" href="{{ asset('logo.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('logo.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('krisna.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('krisna.png') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -28,7 +28,7 @@
                     <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center" href="#">
                         <img src="https://cdn-icons-png.flaticon.com/512/1375/1375106.png" alt="Logo" height="30"
                             class="me-2">
-                        Galery Foto 
+                        Galery Foto Krisna
                     </a>
 
                     <ul class="mb-2 navbar-nav me-auto mb-lg-0">
@@ -43,11 +43,11 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'album' ? 'active' : '' }}"
-                                    href="#">Album</a>
+                                    href="{{ route('album') }} ">Album</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::currentRouteName() == 'like' ? 'active' : '' }}"
-                                    href="#">Like</a>
+                                    href="{{ route('like') }} ">Like</a>
                             </li>
                         @else
                             <li class="nav-item">
@@ -92,8 +92,8 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1" class="form-label">Password</label>
-                                            <input type="password" name="password" id="password" class="form-control"
-                                                required>
+                                            <input type="password" name="password" id="password"
+                                                class="form-control" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="confirmPassword" class="form-label">Konfirmasi
@@ -185,10 +185,8 @@
                         </div>
                     </div>
                     <form class="d-flex" role="search">
-                        <input class="form-control me-3 " type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success me-2" type="submit">Search</button>
                         @if (Auth::check() == true)
-                            {{-- <input type="text" value="{{ Auth::user()->name }}" readonly
+                            {{-- <input type="text" value="{{ Auth::user()->name }}" readonly wire: wire:
                                 class="form-control me-2"> --}}
                             <a class="btn btn-outline-danger" href="{{ route('users.logout') }}">Logout</a>
                         @else
@@ -268,6 +266,178 @@
                 themeIcon.classList.add('bi-sun-fill');
             }
         }
+
+        // Add this script at the end of your body tag, just before the closing </body>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('input[type="search"]');
+            const searchBtn = document.querySelector('button[type="submit"]');
+            let searchTimeout;
+
+            if (searchInput && searchBtn) {
+                // Prevent the default form submission
+                searchBtn.closest('form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    performSearch(searchInput.value);
+                });
+
+                // Set up the input event listener with debounce
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    const query = this.value.trim();
+
+                    // Only perform search if there's something to search for
+                    if (query.length > 0) {
+                        searchTimeout = setTimeout(() => {
+                            performSearch(query);
+                        }, 500); // 500ms delay
+                    }
+                });
+            }
+
+            function performSearch(query) {
+                // Show loading indicator
+                showLoading();
+
+                // Make AJAX request to search endpoint
+                fetch(`/search?query=${encodeURIComponent(query)}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the DOM with search results
+                        updateSearchResults(data);
+                        hideLoading();
+                    })
+                    .catch(error => {
+                        console.error('Search error:', error);
+                        hideLoading();
+                    });
+            }
+
+            function showLoading() {
+                // You can create and show a loading spinner here
+                const existingSpinner = document.getElementById('search-spinner');
+                if (!existingSpinner) {
+                    const spinner = document.createElement('div');
+                    spinner.id = 'search-spinner';
+                    spinner.className = 'spinner-border spinner-border-sm text-primary ms-2';
+                    spinner.setAttribute('role', 'status');
+                    spinner.innerHTML = '<span class="visually-hidden">Loading...</span>';
+                    searchBtn.insertAdjacentElement('afterend', spinner);
+                }
+            }
+
+            function hideLoading() {
+                const spinner = document.getElementById('search-spinner');
+                if (spinner) {
+                    spinner.remove();
+                }
+            }
+
+            function updateSearchResults(data) {
+                // Get the container where search results should be displayed
+                // If you don't have a dedicated results container, you'll need to add one
+                const resultsContainer = document.getElementById('search-results') || createResultsContainer();
+
+                // Clear previous results
+                resultsContainer.innerHTML = '';
+
+                if (data.photos && data.photos.length === 0 && data.albums && data.albums.length === 0) {
+                    resultsContainer.innerHTML = '<div class="p-3 text-center">No results found</div>';
+                    return;
+                }
+
+                // Add photo results
+                if (data.photos && data.photos.length > 0) {
+                    const photosHeading = document.createElement('h6');
+                    photosHeading.className = 'dropdown-header';
+                    photosHeading.textContent = 'Photos';
+                    resultsContainer.appendChild(photosHeading);
+
+                    data.photos.forEach(photo => {
+                        const item = document.createElement('a');
+                        item.className = 'dropdown-item d-flex align-items-center';
+                        item.href = `/foto/${photo.id}`;
+
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'me-2';
+                        imgContainer.style.width = '40px';
+                        imgContainer.style.height = '40px';
+                        imgContainer.style.overflow = 'hidden';
+
+                        const img = document.createElement('img');
+                        img.src = `/storage/foto/${photo.foto}`;
+                        img.className = 'img-fluid';
+                        img.alt = photo.judul;
+                        imgContainer.appendChild(img);
+
+                        const textDiv = document.createElement('div');
+                        textDiv.innerHTML = `<strong>${photo.judul}</strong>`;
+
+                        item.appendChild(imgContainer);
+                        item.appendChild(textDiv);
+                        resultsContainer.appendChild(item);
+                    });
+                }
+
+                // Add album results
+                if (data.albums && data.albums.length > 0) {
+                    const albumsHeading = document.createElement('h6');
+                    albumsHeading.className = 'dropdown-header';
+                    albumsHeading.textContent = 'Albums';
+                    resultsContainer.appendChild(albumsHeading);
+
+                    data.albums.forEach(album => {
+                        const item = document.createElement('a');
+                        item.className = 'dropdown-item';
+                        item.href = `/album/${album.id}`;
+                        item.innerHTML = `<i class="bi bi-collection me-2"></i> ${album.album}`;
+                        resultsContainer.appendChild(item);
+                    });
+                }
+
+                // Make results visible
+                showResultsDropdown();
+            }
+
+            function createResultsContainer() {
+                const form = searchBtn.closest('form');
+
+                // Create dropdown container
+                const dropdownContainer = document.createElement('div');
+                dropdownContainer.className = 'position-relative';
+                form.appendChild(dropdownContainer);
+
+                // Create results dropdown
+                const resultsContainer = document.createElement('div');
+                resultsContainer.id = 'search-results';
+                resultsContainer.className = 'dropdown-menu w-100 shadow';
+                resultsContainer.style.maxHeight = '400px';
+                resultsContainer.style.overflowY = 'auto';
+                dropdownContainer.appendChild(resultsContainer);
+
+                return resultsContainer;
+            }
+
+            function showResultsDropdown() {
+                const resultsContainer = document.getElementById('search-results');
+                if (resultsContainer) {
+                    resultsContainer.classList.add('show');
+
+                    // Add click event listener to document to close dropdown when clicking elsewhere
+                    document.addEventListener('click', function closeDropdown(e) {
+                        if (!resultsContainer.contains(e.target) && e.target !== searchInput) {
+                            resultsContainer.classList.remove('show');
+                            document.removeEventListener('click', closeDropdown);
+                        }
+                    });
+                }
+            }
+        });
     </script>
 </body>
 

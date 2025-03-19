@@ -2,9 +2,14 @@
 
 @section('content')
     <div class="container mt-5">
-        <div class="text-center">
+        <div class="mb-3 text-center">
             <h4>Halaman Beranda</h4>
         </div>
+        <form action="{{ route('search') }}" class="mb-5 d-flex position-relative" role="search" method="post">
+            @csrf
+            <input class="form-control me-3" type="search" placeholder="Search....." name="search" aria-label="Search" id="searchInput">
+            <button type="submit" class="btn btn-outline-success me-2">Search</button>
+        </form>        
         @if (Auth::check() == true)
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahFoto">
@@ -249,6 +254,7 @@
 
 @section('script')
     <script>
+        
         $(document).ready(function() {
             // Handler untuk tombol komentar - Kode yang diperbaiki
             $('.btn-komentar').on('click', function() {
