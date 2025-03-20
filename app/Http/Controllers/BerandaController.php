@@ -18,14 +18,13 @@ class BerandaController extends Controller
     {
         if (Auth::check()) {
             $album = AlbumFoto::where('users_id', Auth::user()->id)->get();
-            $fotos = Foto::with('user', 'likes.user')->where('status',"1")->orderBy('created_at', 'desc')->get();
-        }else
-        {
-        $album = null;
-        $fotos = Foto::with('user', 'likes.user')->where('status',"1")->orderBy('created_at', 'desc')->get();
+            $fotos = Foto::with('user', 'likes.user')->where('status', "1")->orderBy('created_at', 'desc')->get(); // Tambahkan get()
+        } else {
+            $album = null;
+            $fotos = Foto::with('user', 'likes.user')->where('status', "1")->orderBy('created_at', 'desc')->get(); // Tambahkan get()
         }
-
-        return view('beranda', compact('album','fotos'));
+    
+        return view('beranda', compact('album', 'fotos'));
     }
     
 

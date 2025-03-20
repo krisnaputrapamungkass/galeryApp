@@ -535,48 +535,58 @@
                 });
             });
 
+            // 
+
+
             $(document).ready(function() {
-                // Untuk upload foto profil
-                $('#uploadFoto').on('change', function() {
-                    validateImageFile(this, 'Foto profil');
-                });
+                // Validasi formulir untuk formulir unggah foto
+                $('form[action="{{ route('foto.store') }}"]').on('submit', function(e) {
+                    let isValid = true;
+                    const judulValue = $(this).find('input[name="judul"]').val().trim();
+                    const fotoValue = $(this).find('input[name="foto"]').val().trim();
+                    let pesanError = [];
 
-                // Untuk upload foto di modal
-                $('#formfile').on('change', function() {
-                    validateImageFile(this, 'Foto');
-                });
-
-                function validateImageFile(input, jenisFile) {
-                    const file = input.files[0];
-                    if (file) {
-                        const validExtensions = ['jpeg', 'png', 'jpg', 'gif', 'svg'];
-                        const fileExtension = file.name.split('.').pop().toLowerCase();
-
-                        if (!validExtensions.includes(fileExtension)) {
-                            // Reset input file
-                            $(input).val('');
-
-                            // Buat dan tampilkan alert
-                            const alertHtml = `
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Format File Tidak Valid!</strong> ${jenisFile} harus dalam format jpeg, png, jpg, gif, atau svg.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                `;
-
-                            // Masukkan alert sebelum elemen parent dari input
-                            $(input).closest('form').before(alertHtml);
-
-                            // Otomatis hapus alert setelah 5 detik
-                            setTimeout(function() {
-                                $('.alert').alert('close');
-                            }, 5000);
-
-                            return false;
-                        }
-                        return true;
+                    // Cek apakah foto kosong
+                    if (!fotoValue) {
+                        isValid = false;
+                        pesanError.push("Foto wajib diisi!");
                     }
-                }
+
+                    // Cek apakah judul kosong
+                    if (!judulValue) {
+                        isValid = false;
+                        pesanError.push("Judul wajib diisi!");
+                    }
+
+                    // Jika ada validasi yang gagal, cegah pengiriman formulir dan tampilkan error
+                    if (!isValid) {
+                        e.preventDefault();
+
+                        // Hapus alert yang ada sebelumnya
+                        $(this).closest('.modal-content').find('.alert').remove();
+
+                        // Buat pesan alert dengan semua error
+                        const alertHtml = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong>
+                    <ul class="mb-0">
+                        ${pesanError.map(msg => `<li>${msg}</li>`).join('')}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+                        // Masukkan alert di bagian atas modal body
+                        $(this).closest('.modal-content').find('.modal-body').prepend(alertHtml);
+
+                        // Otomatis tutup alert setelah 5 detik
+                        setTimeout(function() {
+                            $('.alert').alert('close');
+                        }, 5000);
+
+                        return false;
+                    }
+                });
             });
 
             $('#btnKomentar').on('click', function() {
@@ -739,6 +749,38 @@
             });
         });
 
+
+        $(document).ready(function() {
+            // Form validation for the photo upload form
+            $('form[action="{{ route('foto.store') }}"]').on('submit', function(e) {
+                const judulValue = $(this).find('input[name="judul"]').val().trim();
+
+                if (!judulValue) {
+                    e.preventDefault(); // Prevent form submission
+
+                    // Create alert message
+                    const alertHtml = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> Judul wajib diisi!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+                    // Insert alert at the top of the modal body
+                    $(this).closest('.modal-content').find('.modal-body').prepend(alertHtml);
+
+                    // Auto-dismiss alert after 5 seconds
+                    setTimeout(function() {
+                        $('.alert').alert('close');
+                    }, 5000);
+
+                    // Focus on the judul field
+                    $(this).find('input[name="judul"]').focus();
+
+                    return false;
+                }
+            });
+        });
         setInterval(updateLikedanKomentar, 10000);
     </script>
 @endsection

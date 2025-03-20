@@ -7,9 +7,10 @@
         </div>
         <form action="{{ route('search') }}" class="mb-5 d-flex position-relative" role="search" method="post">
             @csrf
-            <input class="form-control me-3" type="search" placeholder="Search....." name="search" aria-label="Search" id="searchInput">
+            <input class="form-control me-3" type="search" placeholder="Search....." name="search" aria-label="Search"
+                id="searchInput">
             <button type="submit" class="btn btn-outline-success me-2">Search</button>
-        </form>        
+        </form>
         @if (Auth::check() == true)
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahFoto">
@@ -43,7 +44,7 @@
                                 <select name="status" id="" class="form-control">
                                     <option value="1">Publish</option>
                                     <option value="0">Draft</option>
-                                    
+
                                 </select>
                                 <label for="">Album</label>
                                 <select name="album_id" id="" class="form-control">
@@ -112,12 +113,12 @@
                             </div>
                             <div class="col">
                                 {{-- <label for="">Dibuat Oleh :</> --}}
-                                    <label for="">Dibuat Oleh :</label> <span id="name">Nama Author</span>
-                                    <hr>
-                                    <label for="">Judul :</label> <span id="judul">Isi Caption</span>
-                                    <hr>
-                                    <label for="">Deskripsi :</label> <span id="deskripsi">Isi Deskripsi</span>
-                                    <hr>
+                                <label for="">Dibuat Oleh :</label> <span id="name">Nama Author</span>
+                                <hr>
+                                <label for="">Judul :</label> <span id="judul">Isi Caption</span>
+                                <hr>
+                                <label for="">Deskripsi :</label> <span id="deskripsi">Isi Deskripsi</span>
+                                <hr>
                             </div>
                         </div>
                     </div>
@@ -254,13 +255,12 @@
 
 @section('script')
     <script>
-        
         $(document).ready(function() {
             // Handler untuk tombol komentar - Kode yang diperbaiki
             $('.btn-komentar').on('click', function() {
                 var id = $(this).data('id');
                 $('#idFoto').val(id);
-                
+
                 // Mengambil komentar dengan AJAX
                 $.ajax({
                     url: "{{ route('Detailkomentar', ':id') }}".replace(':id', id),
@@ -453,6 +453,101 @@
                 });
             });
         }
+
+        // $(document).ready(function() {
+        //     // Untuk upload foto profil
+        //     $('#uploadFoto').on('change', function() {
+        //         validateImageFile(this, 'Foto profil');
+        //     });
+
+        //     // Untuk upload foto di modal
+        //     $('#formfile').on('change', function() {
+        //         validateImageFile(this, 'Foto');
+        //     });
+
+        //     function validateImageFile(input, jenisFile) {
+        //         const file = input.files[0];
+        //         if (file) {
+        //             const validExtensions = ['jpeg', 'png', 'jpg', 'gif', 'svg'];
+        //             const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        //             if (!validExtensions.includes(fileExtension)) {
+        //                 // Reset input file
+        //                 $(input).val('');
+
+        //                 // Buat dan tampilkan alert
+        //                 const alertHtml = `
+        //             <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        //                 <strong>Format File Tidak Valid!</strong> ${jenisFile} harus dalam format jpeg, png, jpg, gif, atau svg.
+        //                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        //             </div>
+        //         `;
+
+        //                 // Masukkan alert sebelum elemen parent dari input
+        //                 $(input).closest('form').before(alertHtml);
+
+        //                 // Otomatis hapus alert setelah 5 detik
+        //                 setTimeout(function() {
+        //                     $('.alert').alert('close');
+        //                 }, 5000);
+
+        //                 return false;
+        //             }
+        //             return true;
+        //         }
+        //     }
+        // });
+
+        $(document).ready(function() {
+    // Validasi formulir untuk formulir unggah foto
+    $('form[action="{{ route("foto.store") }}"]').on('submit', function(e) {
+        let isValid = true;
+        const judulValue = $(this).find('input[name="judul"]').val().trim();
+        const fotoValue = $(this).find('input[name="foto"]').val().trim();
+        let pesanError = [];
+
+        // Cek apakah foto kosong
+        if (!fotoValue) {
+            isValid = false;
+            pesanError.push("Foto wajib diisi!");
+        }
+
+        // Cek apakah judul kosong
+        if (!judulValue) {
+            isValid = false;
+            pesanError.push("Judul wajib diisi!");
+        }
+
+        // Jika ada validasi yang gagal, cegah pengiriman formulir dan tampilkan error
+        if (!isValid) {
+            e.preventDefault();
+
+            // Hapus alert yang ada sebelumnya
+            $(this).closest('.modal-content').find('.alert').remove();
+
+            // Buat pesan alert dengan semua error
+            const alertHtml = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong>
+                    <ul class="mb-0">
+                        ${pesanError.map(msg => `<li>${msg}</li>`).join('')}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+            // Masukkan alert di bagian atas modal body
+            $(this).closest('.modal-content').find('.modal-body').prepend(alertHtml);
+
+            // Otomatis tutup alert setelah 5 detik
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 5000);
+
+            return false;
+        }
+    });
+});
         setInterval(updateLikedanKomentar, 10000);
     </script>
 @endsection
