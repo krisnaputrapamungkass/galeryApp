@@ -237,9 +237,9 @@
                     @endif
                     @foreach ($fotos as $item)
                         <div class="col-auto">
-                            <div class="mt-3 card" style="width: 18rem;">
+                            <div class="mt-3 card" style="width: 20rem;">
                                 <img src="{{ asset('storage/images/' . $item->foto) }}"
-                                    style="text-align:center;width: 285px; height: 200px;" class="card-img-top"
+                                    style="text-align:center;width: 300px; height: 200px;" class="card-img-top"
                                     alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $item->judul }}</h5>
@@ -319,17 +319,32 @@
                                             <label for="" class="komentarLabel" data-id="{{ $item->id }}">
                                                 {{ $item->komentar->count() }}</label>
                                         </button>
-                                        <button type="button" class="btn btn-outline-info status" data-id="{{ $item->id }}" data-status="{{ $item->status }}">
+                                        <button type="button" class="btn btn-outline-info status"
+                                            data-id="{{ $item->id }}" data-status="{{ $item->status }}">
                                             @if ($item->status == 0)
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path fill="#000" d="m20.475 23.3l-2.95-2.95q-1.2.8-2.587 1.225T12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12q0-1.55.425-2.937T3.65 6.475L.675 3.5L2.1 2.075l19.8 19.8zM11 19.95V18q-.825 0-1.412-.587T9 16v-1l-4.8-4.8q-.075.45-.137.9T4 12q0 3.025 1.988 5.3T11 19.95m9.35-2.475l-1.45-1.45q.525-.925.813-1.937T20 12q0-2.45-1.362-4.475T15 4.6V5q0 .825-.587 1.413T13 7h-2v1.125L6.525 3.65q1.2-.775 2.575-1.212T12 2q2.075 0 3.9.788t3.175 2.137T21.213 8.1T22 12q0 1.525-.437 2.9t-1.213 2.575" />
-                                            </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="#000"
+                                                        d="m20.475 23.3l-2.95-2.95q-1.2.8-2.587 1.225T12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12q0-1.55.425-2.937T3.65 6.475L.675 3.5L2.1 2.075l19.8 19.8zM11 19.95V18q-.825 0-1.412-.587T9 16v-1l-4.8-4.8q-.075.45-.137.9T4 12q0 3.025 1.988 5.3T11 19.95m9.35-2.475l-1.45-1.45q.525-.925.813-1.937T20 12q0-2.45-1.362-4.475T15 4.6V5q0 .825-.587 1.413T13 7h-2v1.125L6.525 3.65q1.2-.775 2.575-1.212T12 2q2.075 0 3.9.788t3.175 2.137T21.213 8.1T22 12q0 1.525-.437 2.9t-1.213 2.575" />
+                                                </svg>
                                             @else
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path fill="#000" d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m-1-2.05V18q-.825 0-1.412-.587T9 16v-1l-4.8-4.8q-.075.45-.137.9T4 12q0 3.025 1.988 5.3T11 19.95m6.9-2.55q1.025-1.125 1.563-2.512T20 12q0-2.45-1.362-4.475T15 4.6V5q0 .825-.587 1.413T13 7h-2v2q0 .425-.288.713T10 10H8v2h6q.425 0 .713.288T15 13v3h1q.65 0 1.175.388T17.9 17.4" />
-                                            </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="#000"
+                                                        d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m-1-2.05V18q-.825 0-1.412-.587T9 16v-1l-4.8-4.8q-.075.45-.137.9T4 12q0 3.025 1.988 5.3T11 19.95m6.9-2.55q1.025-1.125 1.563-2.512T20 12q0-2.45-1.362-4.475T15 4.6V5q0 .825-.587 1.413T13 7h-2v2q0 .425-.288.713T10 10H8v2h6q.425 0 .713.288T15 13v3h1q.65 0 1.175.388T17.9 17.4" />
+                                                </svg>
                                             @endif
                                         </button>
+                                        @if (Auth::user()->id == $item->users_id)
+                                            <button type="button" class="btn btn-outline-danger delete-photo"
+                                                data-id="{{ $item->id }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="currentColor"
+                                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12l1.41 1.41L13.41 14l2.12 2.12l-1.41 1.41L12 15.41l-2.12 2.12l-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z" />
+                                                </svg>
+                                            </button>
+                                        @endif
                                         <div class="modal fade" id="komentarModal" tabindex="-1"
                                             aria-labelledby="komentarModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -520,6 +535,50 @@
                 });
             });
 
+            $(document).ready(function() {
+                // Untuk upload foto profil
+                $('#uploadFoto').on('change', function() {
+                    validateImageFile(this, 'Foto profil');
+                });
+
+                // Untuk upload foto di modal
+                $('#formfile').on('change', function() {
+                    validateImageFile(this, 'Foto');
+                });
+
+                function validateImageFile(input, jenisFile) {
+                    const file = input.files[0];
+                    if (file) {
+                        const validExtensions = ['jpeg', 'png', 'jpg', 'gif', 'svg'];
+                        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+                        if (!validExtensions.includes(fileExtension)) {
+                            // Reset input file
+                            $(input).val('');
+
+                            // Buat dan tampilkan alert
+                            const alertHtml = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Format File Tidak Valid!</strong> ${jenisFile} harus dalam format jpeg, png, jpg, gif, atau svg.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+
+                            // Masukkan alert sebelum elemen parent dari input
+                            $(input).closest('form').before(alertHtml);
+
+                            // Otomatis hapus alert setelah 5 detik
+                            setTimeout(function() {
+                                $('.alert').alert('close');
+                            }, 5000);
+
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            });
+
             $('#btnKomentar').on('click', function() {
                 var id = $('#idFoto').val();
                 var komentar = $('#isiKomentar').val();
@@ -638,6 +697,47 @@
                 });
             });
         }
+
+        // Add this inside your existing $(document).ready(function() { ... });
+        $('.delete-photo').on('click', function() {
+            var id = $(this).data('id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Anda tidak dapat mengembalikannya!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('foto.destroy', ':id') }}".replace(':id', id),
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "DELETE",
+                        success: function(data) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Foto Anda telah dihapus.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function(err) {
+                            Swal.fire(
+                                'Error!',
+                                'Terjadi kesalahan saat menghapus foto Anda.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
 
         setInterval(updateLikedanKomentar, 10000);
     </script>

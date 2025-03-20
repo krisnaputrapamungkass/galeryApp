@@ -51,22 +51,22 @@ class FotoController extends Controller
             if ($fotoSimpan) {
                 // Cek apakah user datang dari halaman profile
                 $previousUrl = url()->previous();
-            
+
                 if (str_contains($previousUrl, route('profile'))) {
                     return redirect()->route('profile')->with('success', 'Foto berhasil ditambahkan');
                 }
-            
+
                 return redirect()->route('beranda.index')->with('success', 'Foto berhasil ditambahkan');
             } else {
                 return redirect()->back()->with('error', 'Foto gagal ditambahkan');
             }
         } else {
             $previousUrl = url()->previous();
-            
+
             if (str_contains($previousUrl, route('profile'))) {
                 return redirect()->route('profile')->with('success', 'Gagal Upload');
             }
-        
+
             return redirect()->route('beranda.index')->with('success', 'gagal Upload');
         }
     }
@@ -81,13 +81,13 @@ class FotoController extends Controller
             'fotos_id' => $request->id,
             'users_id' => Auth::user()->id,
         ]);
-        
+
         if ($simpan) {
             return response()->json([
                 'success' => true,
                 'message' => 'Like berhasil',
             ]);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Like gagal',
@@ -104,13 +104,13 @@ class FotoController extends Controller
         $findData = LikeFoto::where('fotos_id', $request->id)->where('users_id', Auth::user()->id)->first();
 
         $simpan = $findData->delete();
-        
+
         if ($simpan) {
             return response()->json([
                 'success' => true,
                 'message' => 'Unlike berhasil',
             ]);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Unlike gagal',
@@ -131,18 +131,17 @@ class FotoController extends Controller
             'komentar' => $request->komentar
         ]);
 
-        if($simpan){
+        if ($simpan) {
             return response()->json([
                 'success' => true,
                 'message' => 'Komentar Berhasil',
             ]);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Komentar Gagal',
             ]);
         }
-    
     }
 
     public function Detailkomentar(Request $request, $id)
@@ -187,8 +186,23 @@ class FotoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $foto = Foto::find($id);
+
+        // Check if the authenticated user owns this photo
+        if (Auth::user()->id !== $foto->users_id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Delete the photo file from storage
+        if (file_exists(public_path('storage/images/' . $foto->foto))) {
+            unlink(public_path('storage/images/' . $foto->foto));
+        }
+
+        // Delete the photo record
+        $foto->delete();
+
+        return response()->json(['success' => true]);
     }
 }
